@@ -8,6 +8,7 @@ const routes = [
       import(
         /* webpackChunkName: "login" */ './components/views/index.vue'
       ),
+      
   },
   {
     path: '/login',
@@ -59,11 +60,19 @@ const routes = [
       ),
   },
   {
-    path: '/about-contact',
-    name: 'about-contact',
+    path: '/about',
+    name: 'about',
     component: () =>
       import(
-        /* webpackChunkName: "home" */ './components/views/about_contact.vue'
+        /* webpackChunkName: "home" */ './components/views/about.vue'
+      ),
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/contact.vue'
       ),
   }
 ];
