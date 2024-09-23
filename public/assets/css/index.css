@@ -93,3 +93,58 @@ table{
     background-size: cover;
     height: 100%;
 }
+@media (max-width: 768px) {
+    .logo {
+      font-size: 1.2em;
+      white-space: nowrap; 
+    }
+    .edoc-logo-sub {
+      font-size: 0.9em; /* Smaller text for mobile */
+      white-space: nowrap; 
+      padding-left:15px;
+    }
+  
+    .heading-text {
+      font-size: 2em;
+    }
+  
+    .sub-text2 {
+      font-size: 1em;
+    }
+  
+    .nav-links {
+      flex-direction: column;
+    }
+  
+    .nav-item {
+      padding: 5px 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo {
+      font-size: 1.2em;
+      white-space: nowrap; 
+    }
+    .edoc-logo-sub {
+      font-size: 0.9em; /* Smaller text for mobile */
+      white-space: nowrap; 
+      padding-left:15px;
+    }
+  
+    .heading-text {
+      font-size: 2em;
+    }
+  
+    .sub-text2 {
+      font-size: 1em;
+    }
+  
+    .nav-links {
+      flex-direction: column;
+    }
+  
+    .nav-item {
+      padding: 5px 10px;
+    }
+  }

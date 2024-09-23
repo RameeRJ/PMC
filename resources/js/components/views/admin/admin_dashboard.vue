@@ -1,0 +1,3 @@
+<template>
+    hellooooo admin 
+</template>

@@ -5,8 +5,10 @@
       <table border="0">
         <tr>
           <td width="80%">
-            <font class="edoc-logo">PMC. </font>
-            <font class="edoc-logo-sub">| PATHAMBAD MEDICAL CENTER</font>
+            <router-link to="/about-contact" class="non-style-link">
+              <font class="edoc-logo">PMC. </font>
+              <font class="edoc-logo-sub">| PATHAMBAD MEDICAL CENTER</font>
+            </router-link>
           </td>
           <td width="12%">
             <router-link to="/login" class="non-style-link">
@@ -31,7 +33,7 @@
             <p class="sub-text2">
               Skip the hassle and long waits!<br />
               Find your doctor online, book as you wish with PMC. <br />
-              Enjoy free doctor appointment booking services. Schedule your visit today!"
+              Enjoy free doctor appointment booking services. Schedule your visit today!
             </p>
           </td>
        
@@ -53,7 +55,5 @@ export default {
 @import "/public/assets/css/index.css";
 @import "/public/assets/css/main.css";
 
-table {
-  animation: transitionIn-Y-bottom 0.5s;
-}
+
 </style>
