@@ -68,5 +68,4 @@ export default {
 @import "/public/assets/css/index.css";
 @import "/public/assets/css/main.css";
 
-
 </style>
