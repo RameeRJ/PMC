@@ -72,7 +72,12 @@ export default {
           remember: this.remember,
         });
 
-        const userType = response.data.user.user_type;
+        const user = response.data.user;
+
+        // Store user data in localStorage for use across the application
+        localStorage.setItem('user', JSON.stringify(user));
+
+        // Show success message
         Swal.fire({
           icon: 'success',
           title: 'Login Successful!',
@@ -83,6 +88,7 @@ export default {
         });
 
         // Redirect based on user type
+        const userType = user.user_type;
         if (userType === 'admin') {
           this.$router.push('/admin');
         } else if (userType === 'patient') {
@@ -100,8 +106,11 @@ export default {
       }
     },
   },
+  mounted() {
+    // Clear any existing user data on load
+    localStorage.removeItem('user');
+  },
 };
-
 </script>
 
 <style scoped>

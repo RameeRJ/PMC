@@ -64,19 +64,25 @@
     align-items: center;
     padding: 10px 20px;
     cursor: pointer;
+    transition: 0.5s;
   }
   
   .menu-btn:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .menu-text {
-    margin-left: 10px;
-    font-size: 16px;
+    background-color: #f37c9030;
   }
   
   .menu-active {
-    background-color: #e6f7ff;
+    background-color: #d6718255;
+    border-right: 7px solid #c86373;
+  }
+
+  .menu-active i {
+    color: #c86373;
+  }
+
+
+  .menu-active .menu-text {
+    color: #c86373;
   }
   
   .menu-icon-dashbord,
@@ -97,7 +103,7 @@
   }
   
   .menu-icon-dashbord-active {
-    color: #007bff;
+    color: #c86373;
   }
   
   .non-style-link-menu {
@@ -108,7 +114,7 @@
   }
   
   .non-style-link-menu-active {
-    color: #007bff;
+    color: #c86373;
   }
   
   .menu-icon-dashbord i:before {
@@ -139,4 +145,57 @@
   body {
     font-family: Arial, sans-serif;
   }
+  @media (max-width: 768px) {
+   
   
+    .menu-btn {
+      padding: 10px; /* Adjust padding for icon-only buttons */
+    }
+    .menu {
+      width: 170px; /* Set width for the menu */
+    }
+  
+    .menu-closed {
+      transform: translateX(-100%); /* Hide the sidebar when closed */
+    }
+  
+
+  
+    .menu-spacer {
+      display: none; /* Hide spacer on smaller screens */
+    }
+  }
+  
+  @media (max-width: 468px) {
+    .menu-text {
+      display: none; /* Hide text on smaller screens */
+    }
+  
+    .menu-btn {
+      justify-content: center; /* Center the icon in the button */
+      padding: 10px; /* Adjust padding for icon-only buttons */
+    }
+    .menu {
+      width: 150px; /* Set width for the menu */
+    }
+  
+    .menu-closed {
+      transform: translateX(-100%); /* Hide the sidebar when closed */
+    }
+  
+
+  
+    .menu-spacer {
+      display: none; /* Hide spacer on smaller screens */
+    }
+  }
+  
+  /* Button Style */
+  .navbar-toggler {
+    display: block; /* Show button */
+    margin: 10px; /* Adjust margin as needed */
+    background-color: #007bff; /* Button color */
+    border: none;
+    padding: 10px;
+    color: white; /* Icon color */
+  }

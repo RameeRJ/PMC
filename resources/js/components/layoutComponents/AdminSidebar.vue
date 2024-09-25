@@ -23,27 +23,27 @@
                     <!-- <img src="@/assets/images/logo.svg"" alt="user" width="100%" style="border-radius:50%"> -->
                   </td>
                   <td style="padding:0px;margin:0px;">
-                    <p class="profile-title">Administrator</p>
-                    <p class="profile-subtitle">admin@edoc.com</p>
+                    <p class="profile-title">{{ user ? user.name : 'Guest' }}</p>
+                  <p class="profile-subtitle">{{ user ? user.email : 'Not logged in' }}</p>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-dashbord menu-active menu-icon-dashbord-active">
-              <router-link to="/admin" class="non-style-link-menu non-style-link-menu-active">
-                <div class="menu-item">
-                  <i class="fas fa-tachometer-alt"></i>
-                  <p class="menu-text">Dashboard</p>
-                </div>
-              </router-link>
-            </td>
-          </tr>
+          <td class="menu-btn menu-icon-dashbord" :class="{ 'menu-active': isActive('/admin') }">
+            <router-link to="/admin" class="non-style-link-menu">
+              <div class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <p class="menu-text">Dashboard</p>
+              </div>
+            </router-link>
+          </td>
+        </tr>
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-doctor">
-              <router-link to="/doctor-view" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-doctor') }">
+              <router-link to="/view-doctor" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-user-md"></i>
                   <p class="menu-text">Doctors</p>
@@ -94,13 +94,25 @@
     name: 'AdminSidebar',
     data() {
       return {
-        isSidebarOpen: true, // Initial state of the sidebar
+        isSidebarOpen: true,
+        user: null, // Initial state of the sidebar
       };
     },
+    mounted() {
+    // Retrieve the user from localStorage if logged in
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+    }
+  },
+
     methods: {
       toggleSidebar() {
         this.isSidebarOpen = !this.isSidebarOpen; // Toggle the sidebar state
       },
+      isActive(route) {
+      return this.$route.path.startsWith(route);
+    },
     },
   }
   </script>
@@ -140,20 +152,21 @@
   .menu-text {
     margin: 0; /* Remove default margin from paragraph */
   }
+  .menu-btn {
+    cursor:auto;
+   }
   
   /* Responsive Styles */
   @media (max-width: 768px) {
     .menu {
-      width: 250px; /* Set width for the menu */
+      width: 170px; /* Set width for the menu */
     }
   
     .menu-closed {
       transform: translateX(-100%); /* Hide the sidebar when closed */
     }
   
-    .menu-text {
-      display: inline; /* Show text on smaller screens */
-    }
+
   
     .menu-spacer {
       display: none; /* Hide spacer on smaller screens */

@@ -74,7 +74,15 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/contact.vue'
       ),
-  }
+  },
+  {
+    path: '/view-doctor',
+    name: 'view-doctor',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/view-doctor.vue'
+      ),
+  },
 ];
 
 // Create the router instance

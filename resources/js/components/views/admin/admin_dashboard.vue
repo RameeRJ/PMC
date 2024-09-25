@@ -89,4 +89,13 @@
   body{
     background:tan;
   }
+  
+
+  @media (max-width: 768px) {
+  .card-title {
+    font-size: 1rem; /* Smaller font size for smaller screens */
+    white-space: normal; /* Allow wrapping */
+    line-height: 1.5; /* Adjust line height for better spacing */
+  }
+}
   </style>
