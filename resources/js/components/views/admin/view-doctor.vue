@@ -31,7 +31,7 @@
               <tr v-for="doctor in doctors" :key="doctor.id">
                 <td>{{ doctor.name }}</td>
                 <td>{{ doctor.email }}</td>
-                <td>{{ doctor.Department }}</td>
+                <td>{{ doctor.department }}</td>
                 <td>{{ doctor.phone }}</td>
                 <td>
                   <button class="btn btn-sm btn-primary">Edit</button>
@@ -60,8 +60,8 @@
             <input type="email" id="email" v-model="newDoctor.email" required />
           </div>
           <div class="form-group">
-            <label for="specialty">Specialty</label>
-            <input type="text" id="specialty" v-model="newDoctor.specialty" required />
+            <label for="specialty">Department</label>
+            <input type="text" id="specialty" v-model="newDoctor.department" required />
           </div>
           <div class="form-group">
             <label for="phone">Phone</label>
@@ -72,7 +72,7 @@
             <input type="password" id="password" v-model="newDoctor.password" required />
           </div><div class="form-group">
             <label for="password">ConfirmPassword</label>
-            <input type="password" id="password" v-model="newDoctor.password" required />
+            <input type="password" id="password" v-model="newDoctor.confirmpassword" required />
           </div>
           <div class="button-group">
             <button type="submit" class="btn btn-add">Submit</button>
@@ -118,7 +118,7 @@ export default {
       // Clear the form
       this.newDoctor.name = "";
       this.newDoctor.email = "";
-      this.newDoctor.specialty = "";
+      this.newDoctor.department = "";
       this.newDoctor.phone = "";
       this.newDoctor.password = "";
 

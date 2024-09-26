@@ -33,6 +33,19 @@
           <span class="text-danger" v-if="errors.email">{{ errors.email[0] }}</span>
         </div>
 
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input
+            type="phone"
+            v-model="phone"
+            id="phone"
+            class="input-text"
+            placeholder="Phone Number"
+           
+          />
+          <span class="text-danger" v-if="errors.phone">{{ errors.phone[0] }}</span>
+        </div>
+
         <!-- Password Field -->
         <div class="form-group">
           <label for="password">Password:</label>
@@ -83,6 +96,7 @@ export default {
     return {
       name: '',
       email: '',
+      phone: '',
       password: '',
       confirmpassword: '',
       errors: {}, // Store validation errors
@@ -96,6 +110,7 @@ export default {
       const data = {
         name: this.name,
         email: this.email,
+        phone: this.phone,
         password: this.password,
         password_confirmation: this.confirmpassword,
       };

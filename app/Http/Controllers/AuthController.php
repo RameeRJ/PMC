@@ -15,9 +15,13 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+
+        $phoneWithCountryCode = '+91' . $request->phone;
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $phoneWithCountryCode,
             'password' => Hash::make($request->password),
         ]);
 
