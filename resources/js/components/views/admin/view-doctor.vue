@@ -2,14 +2,11 @@
   <Navbar />
   <div class="container-fluid">
     <div class="row">
-      <!-- Sidebar Column (left) -->
       <div class="col-md-3 col-lg-2 bg-light vh-100 p-0">
         <AdminSidebar />
       </div>
 
-      <!-- Admin Content (right) -->
       <div class="col-md-9 col-lg-10 p-4">
-        <!-- List of Doctors -->
         <div class="doctor-list-section">
           <div class="doctor-list-header d-flex justify-content-between align-items-center margin">
             <h2>All Doctors ({{ doctors.length }})</h2>
@@ -45,10 +42,9 @@
       </div>
     </div>
 
-    <!-- Add Doctor Modal -->
     <div v-if="showAddDoctorModal" class="modal-backdrop">
       <div class="modal-content">
-        <button class="close-icon" @click="showAddDoctorModal = false" ><i class="fas fa-times"></i></button>
+        <button class="close-icon" @click="showAddDoctorModal = false"><i class="fas fa-times"></i></button>
         <h3 class="center">Add New Doctor</h3>
         <form @submit.prevent="submitNewDoctor">
           <div class="form-group">
@@ -60,8 +56,8 @@
             <input type="email" id="email" v-model="newDoctor.email" required />
           </div>
           <div class="form-group">
-            <label for="specialty">Department</label>
-            <input type="text" id="specialty" v-model="newDoctor.department" required />
+            <label for="department">Department</label>
+            <input type="text" id="department" v-model="newDoctor.department" required />
           </div>
           <div class="form-group">
             <label for="phone">Phone</label>
@@ -70,9 +66,10 @@
           <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" v-model="newDoctor.password" required />
-          </div><div class="form-group">
-            <label for="password">ConfirmPassword</label>
-            <input type="password" id="password" v-model="newDoctor.confirmpassword" required />
+          </div>
+          <div class="form-group">
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" id="confirmpassword" v-model="newDoctor.confirmpassword" required />
           </div>
           <div class="button-group">
             <button type="submit" class="btn btn-add">Submit</button>
@@ -87,6 +84,7 @@
 <script>
 import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
 import Navbar from "../../layoutComponents/Navbar.vue";
+import axios from 'axios'; // Import axios for API calls
 
 export default {
   name: "AdminHome",
@@ -96,38 +94,67 @@ export default {
   },
   data() {
     return {
-      showAddDoctorModal: false, // Control modal visibility
+      showAddDoctorModal: false,
       newDoctor: {
         name: "",
         email: "",
-        Department: "",
+        department: "",
         phone: "",
         password: "",
+        confirmpassword: "",
       },
-      doctors: [], // This will hold the list of doctors
+      doctors: [],
     };
   },
+  created() {
+    this.fetchDoctors(); // Fetch the list of doctors when the component is created
+  },
   methods: {
-    addNewDoctor() {
-      this.showAddDoctorModal = true; // Show modal on button click
+    async fetchDoctors() {
+      try {
+        const response = await axios.get('/doctors'); // Adjust the URL if needed
+        this.doctors = response.data.map(doctor => ({
+          id: doctor.id,
+          name: doctor.user.name, // Assuming user is nested and has a name property
+          email: doctor.user.email, // Assuming user has an email property
+          department: doctor.department,
+          phone: doctor.user.phone, // Assuming user has a phone property
+        })); // Transform the response to fit your table
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
     },
-    submitNewDoctor() {
-      // Add the new doctor to the list (you can replace this with an API call)
-      this.doctors.push({ ...this.newDoctor, id: Date.now() });
-
-      // Clear the form
-      this.newDoctor.name = "";
-      this.newDoctor.email = "";
-      this.newDoctor.department = "";
-      this.newDoctor.phone = "";
-      this.newDoctor.password = "";
-
-      // Hide modal
-      this.showAddDoctorModal = false;
+    async submitNewDoctor() {
+      if (this.newDoctor.password !== this.newDoctor.confirmpassword) {
+        alert("Passwords do not match");
+        return;
+      }
+      try {
+        await axios.post('/doctors', this.newDoctor);
+        this.fetchDoctors();
+        this.resetForm();
+        this.showAddDoctorModal = false;
+      } catch (error) {
+        console.error('Error adding doctor:', error);
+      }
     },
-    removeDoctor(doctorId) {
-      // Remove doctor from the list (you can replace this with an API call)
-      this.doctors = this.doctors.filter((doctor) => doctor.id !== doctorId);
+    resetForm() {
+      this.newDoctor = {
+        name: "",
+        email: "",
+        department: "",
+        phone: "",
+        password: "",
+        confirmpassword: "",
+      };
+    },
+    async removeDoctor(doctorId) {
+      try {
+        await axios.delete(`/doctors/${doctorId}`); // Adjust the URL for deletion
+        this.fetchDoctors();
+      } catch (error) {
+        console.error('Error removing doctor:', error);
+      }
     },
   },
 };
@@ -135,5 +162,4 @@ export default {
 
 <style scoped>
 @import "/public/assets/css/view.css";
-
-</style>
+</style>   
