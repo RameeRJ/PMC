@@ -83,6 +83,14 @@ const routes = [
         /* webpackChunkName: "home" */ './components/views/admin/view-doctor.vue'
       ),
   },
+   {
+    path: '/add-doctor',
+    name: 'add-doctor',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/add-doctor.vue'
+      ),
+  },
 ];
 
 // Create the router instance

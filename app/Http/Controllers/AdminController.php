@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Doctor;
+use App\Http\Requests\DoctorRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,40 +11,35 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function Dstore(Request $request)
+    public function docstore(DoctorRequest $request)
     {
-        // Validate the request
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'department' => 'required|string|max:255',
-            'phone' => 'required|string|regex:/^\d{10}$/',
-        ]);
+        // Validate the reques
 
         // Create user with user_type set to 'doctor'
-        $phoneWithCountryCode = '+91' . $request->phone;
+
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $phoneWithCountryCode,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'user_type' => 'doctor',
         ]);
 
         // Create the doctor record
         Doctor::create([
-            'user_id' => $user->id, // Store the user_id in the doctors table
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'department' => $request->department,
         ]);
 
         return response()->json(['message' => 'Doctor added successfully'], 201);
     }
 
-    public function index()
+    public function docindex()
     {
-        // Get all doctors with user details
         $doctors = Doctor::with('user')->get();
         return response()->json($doctors);
     }
