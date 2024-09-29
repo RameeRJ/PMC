@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function docstore(DoctorRequest $request)
+    public function docStore(DoctorRequest $request)
     {
         // Validate the reques
 
@@ -38,9 +38,18 @@ class AdminController extends Controller
         return response()->json(['message' => 'Doctor added successfully'], 201);
     }
 
-    public function docindex()
+    public function docIndex()
     {
         $doctors = Doctor::with('user')->get();
         return response()->json($doctors);
+    }
+
+    public function docDestroy($id)
+    {
+        // Soft delete the doctor
+        $doctor = Doctor::findOrFail($id);
+        $doctor->delete(); // Soft delete the doctor
+        
+        return response()->json(['message' => 'Doctor soft deleted successfully']);
     }
 }

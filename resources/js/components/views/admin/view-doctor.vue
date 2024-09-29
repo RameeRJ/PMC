@@ -30,12 +30,15 @@
                 <td>{{ doctor.department }}</td>
                 <td>{{ doctor.phone }}</td>
                 <td>
-                  <button class="btn btn-sm btn-primary">Edit</button>
-                  <button class="btn btn-sm btn-info">View</button>
-                  <button class="btn btn-sm btn-danger" @click="removeDoctor(doctor.id)">Remove</button>
+                    <button class="action">
+                      <i class="fas fa-edit"></i> <!-- Edit icon -->
+                    </button>         
+                    <button class="action" @click="removeDoctor(doctor.id)">
+                      <i class="fas fa-trash-alt"></i> <!-- Remove/Delete icon -->
+                    </button>
                 </td>
               </tr>
-            </tbody>
+            </tbody> 
           </table>
         </div>
       </div>
@@ -164,13 +167,41 @@ export default {
     };
 
     const removeDoctor = async (doctorId) => {
+  // Show confirmation dialog before deletion
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // If user confirms deletion
       try {
-        await axios.delete(`/doctors/${doctorId}`); // Adjust the URL for deletion
-        fetchDoctors(); // Re-fetch doctors after deletion
+        await axios.delete(`/doctors/${doctorId}`); // API call for deletion
+        Swal.fire({
+          toast:true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Doctor has been deleted.',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        fetchDoctors(); // Refresh the doctors list after deletion
       } catch (error) {
         console.error('Error removing doctor:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed!',
+          text: 'Failed to delete doctor. Please try again.',
+        });
       }
-    };
+    }
+  });
+};
 
     // Fetch doctors when the component is mounted
     fetchDoctors();
