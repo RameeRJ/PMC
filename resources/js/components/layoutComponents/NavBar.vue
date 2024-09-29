@@ -19,21 +19,39 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Swal from 'sweetalert2';
 export default {
   methods: {
-    logout() {
-      // Trigger the logout process by calling API or clearing local storage
-      axios.post('/logout').then(response => {
-        // Clear local storage or authentication token
-        localStorage.removeItem('authtoken');
-        // Redirect to login page
-        this.$router.push('/login');
-      }).catch(error => {
-        console.error('Logout error:', error);
-      });
-    }
+    async logout() {
+      try {
+        await axios.post('/logout');
+        
+        // Clear local storage or session data if required
+        localStorage.removeItem('authToken');
+
+        // Redirect the user to the login page
+        this.$router.push({ name: 'index' });
+
+        // Optionally, show a success message (if using a toast system)
+        Swal.fire({
+      icon: 'success',
+      title: 'Logged out successfully',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      padding: '1em',
+    });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error logging out',
+      text: 'Please try again later.',
+    });
   }
-};
+}}}
 </script>
 
 <style scoped>
