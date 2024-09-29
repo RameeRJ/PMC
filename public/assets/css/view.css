@@ -5,6 +5,7 @@
   border-radius: 5px;
 }
 
+
 h1 {
   text-align: center;
 }
@@ -37,6 +38,13 @@ h2 {
   
 
 }
+input:focus {
+  border-color: #c86373; /* Change this to your desired border color */
+  background-color: #e797a434; /* Change this to your desired background color */
+  outline: none; /* Remove the default outline */
+} 
+
+
 .add {
   background-color: whitesmoke;
   color: #c86373;
@@ -50,6 +58,13 @@ h2 {
   gap: 8px;
   padding: 10px 20px;
   transition: background-color 0.3s ease;
+}
+
+.add:hover{
+ background-color: #c86373;
+ color: #ffffff;
+
+
 }
 .margin{
     margin-top: 33px;

@@ -55,9 +55,18 @@
             <input type="email" id="email" v-model="form.email" required />
           </div>
           <div class="form-group">
-            <label for="department">Department</label>
-            <input type="text" id="department" v-model="form.department" required />
-          </div>
+  <label for="department">Department</label>
+  <div class="custom-select-wrapper">
+    <select id="department" v-model="form.department" required>
+      <option value="" disabled>Select Department</option>
+      <option value="Cardiology">Cardiology</option>
+      <option value="Neurology">Neurology</option>
+      <option value="Pediatrics">Pediatrics</option>
+      <option value="Orthopedics">Orthopedics</option>
+      <option value="Gynecology">Gynecology</option>
+    </select>
+  </div>
+</div>
           <div class="form-group">
             <label for="phone">Phone</label>
             <input type="text" id="phone" v-model="form.phone" required />
@@ -102,7 +111,7 @@ export default {
       name: "",
       email: "",
       department: "",
-      phone: +'+92' + "",
+      phone:    "",
       password: "",
       confirmpassword: "",
     });
@@ -183,4 +192,43 @@ export default {
 
 <style scoped>
 @import "/public/assets/css/view.css";
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-wrapper select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  background-position: right 10px center; /* Position for arrow */
+  background-repeat: no-repeat;
+  background-image: none; /* Remove default background */
+}
+
+/* Adding custom arrow */
+.custom-select-wrapper::after {
+  content: '\25BC'; /* Unicode for downward triangle */
+  font-size: 16px;
+  color: #333;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensures the arrow doesn't block interaction with the select */
+}
+
+
+.custom-select-wrapper select:focus {
+  outline: none;
+  border-color:#c86373;
+  background-color: #e797a434;
+}
+
 </style>
