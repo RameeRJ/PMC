@@ -58,7 +58,7 @@
   </template>
           <script>
           import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
-          import Navbar from "../../layoutComponents/Navbar.vue";
+          import Navbar from "../../layoutComponents/NavBar.vue";
           import axios from 'axios'; // Assuming you are using Axios for API calls
           import { ref } from 'vue';
           import Swal from "sweetalert2";

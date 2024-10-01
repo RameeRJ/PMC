@@ -31,8 +31,8 @@
             </td>
           </tr>
           <tr class="menu-row">
-          <td class="menu-btn menu-icon-dashbord" :class="{ 'menu-active': isActive('/admin') }">
-            <router-link to="/admin" class="non-style-link-menu">
+          <td class="menu-btn menu-icon-dashbord" :class="{ 'menu-active': isActive('/doctor') }">
+            <router-link to="/doctor" class="non-style-link-menu">
               <div class="menu-item">
                 <i class="fas fa-tachometer-alt"></i>
                 <p class="menu-text">Dashboard</p>
@@ -42,11 +42,11 @@
         </tr>
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-doctor') }">
-              <router-link to="/view-doctor" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-schedule" :class="{ 'menu-active': isActive('/my-session') }">
+              <router-link to="/my-session" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-user-md"></i>
-                  <p class="menu-text">Doctors</p>
+                  <p class="menu-text">My Session</p>
                 </div>
               </router-link>
             </td>
@@ -54,11 +54,11 @@
 
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-department" :class="{ 'menu-active': isActive('/view-department') }">
-              <router-link to="/view-department" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-appointment" :class="{ 'menu-active': isActive('/my-appointments') }">
+              <router-link to="/my-appointments" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-user-md"></i>
-                  <p class="menu-text">Departments</p>
+                  <p class="menu-text">My Appointments</p>
                 </div>
               </router-link>
             </td>
@@ -67,33 +67,11 @@
 
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-schedule" :class="{ 'menu-active': isActive('/view-schedule') }">
-              <router-link to="/view-schedule" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-patient" :class="{ 'menu-active': isActive('/my-patients') }">
+              <router-link to="/my-patients" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-calendar-alt"></i>
-                  <p class="menu-text">Schedule</p>
-                </div>
-              </router-link>
-            </td>
-          </tr>
-          <tr class="menu-spacer"><td></td></tr>
-          <tr class="menu-row">
-            <td class="menu-btn menu-icon-appointment" :class="{ 'menu-active': isActive('/view-appointment') }">
-              <router-link to="/view-appointment" class="non-style-link-menu">
-                <div class="menu-item">
-                  <i class="fas fa-calendar-check"></i>
-                  <p class="menu-text">Appointment</p>
-                </div>
-              </router-link>
-            </td>
-          </tr>
-          <tr class="menu-spacer"><td></td></tr>
-          <tr class="menu-row">
-            <td class="menu-btn menu-icon-patient" :class="{ 'menu-active': isActive('/view-patients') }">
-              <router-link to="/view-patients" class="non-style-link-menu">
-                <div class="menu-item">
-                  <i class="fas fa-procedures"></i>
-                  <p class="menu-text">Patients</p>
+                  <p class="menu-text">My Patients</p>
                 </div>
               </router-link>
             </td>
@@ -105,7 +83,7 @@
   
   <script>
   export default {
-    name: 'AdminSidebar',
+    name: 'DoctorSidebar',
     data() {
       return {
         defaultProfileImage: '/storage/assets/images/default.jpg',

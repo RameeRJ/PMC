@@ -3,19 +3,19 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3 col-lg-2 bg-light vh-100 p-0">
-          <AdminSidebar />
+          <DoctorSidebar />
         </div>
         </div>
         </div>
         </template>
         <script>
-        import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
+        import DoctorSidebar from "../../layoutComponents/DoctorSidebar.vue";
         import Navbar from "../../layoutComponents/NavBar.vue";
         
         export default {
-          name: "Appointment",
+          name: "MyPatients",
           components: {
-            AdminSidebar,
+            DoctorSidebar,
             Navbar,
           },
         }

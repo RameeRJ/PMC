@@ -115,6 +115,30 @@ const routes = [
         /* webpackChunkName: "home" */ './components/views/admin/view-department.vue'
       ),
   },
+  {
+    path: '/my-session',
+    name: 'my-session',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/doctor/my-session.vue'
+      ),
+  },
+  {
+    path: '/my-appointments',
+    name: 'my-appointments',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/doctor/my-appointments.vue'
+      ),
+  },
+  {
+    path: '/my-patients',
+    name: 'my-patients',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/doctor/my-patients.vue'
+      ),
+  },
 ];
 
 // Create the router instance

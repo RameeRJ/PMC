@@ -131,7 +131,7 @@
 
 <script>
 import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
-import Navbar from "../../layoutComponents/Navbar.vue";
+import Navbar from "../../layoutComponents/NavBar.vue";
 import axios from 'axios';
 import { ref,watch } from 'vue';
 import Swal from "sweetalert2";

@@ -51,7 +51,7 @@
 <script>
 import axios from 'axios';
 import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
-import Navbar from "../../layoutComponents/Navbar.vue";
+import Navbar from "../../layoutComponents/NavBar.vue";
 
 export default {
   name: 'AdminHome',

@@ -118,15 +118,18 @@
   }
   
   .menu-icon-dashbord i:before {
-    content: "\f1fe"; /* FontAwesome dashboard icon */
+    content: "\f015"; /* FontAwesome dashboard icon */
+  }
+  .menu-icon-department i:before {
+    content: "\f1ad"; /* FontAwesome dashboard icon */
   }
   
   .menu-icon-doctor i:before {
-    content: "\f0f0"; /* FontAwesome doctor icon */
+    content: "\f0f1"; /* FontAwesome doctor icon */
   }
   
   .menu-icon-schedule i:before {
-    content: "\f073"; /* FontAwesome calendar icon */
+    content: "\f46d"; /* FontAwesome calendar icon */
   }
   
   .menu-icon-appointment i:before {
@@ -134,7 +137,7 @@
   }
   
   .menu-icon-patient i:before {
-    content: "\f193"; /* FontAwesome wheelchair icon */
+    content: "\f487"; /* FontAwesome wheelchair icon */
   }
   .menu-spacer {
     height: 4px; /* Adjust the height as needed */
