@@ -81,18 +81,18 @@
     const fetchDepartments = async () => {
       try {
         const response = await axios.post('/departments'); // Use the POST method with the appropriate endpoint
-        departments.value = response.data; // Update the reactive doctors array
+        departments.value = response.data; // Update the reactive department array
       } catch (error) {
-        console.error('Error fetching doctors:', error);
-        error.value = 'Failed to load doctors. Please try again.'; // Handle the error
+        console.error('Error fetching department:', error);
+        error.value = 'Failed to load department. Please try again.'; // Handle the error
       }
     };
     const registerDepartment = async () => {
       try {
-        await axios.post('/add-departments', form.value); // Use the form data for adding a new doctor
+        await axios.post('/add-departments', form.value); // Use the form data for adding a new department
         Swal.fire({
           icon: 'success',
-          title: 'Doctor registered successfully',
+          title: 'Department registered successfully',
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
@@ -101,9 +101,9 @@
         });
         showAddDepartmentModal.value = false; // Close modal
         resetForm(); // Reset the form after successful registration
-        fetchDepartments(); // Re-fetch doctors after adding
+        fetchDepartments(); // Re-fetch department after adding
       } catch (error) {
-        console.error('Error registering doctor:', error);
+        console.error('Error registering department:', error);
         Swal.fire({
           icon: 'error',
           title: 'Registration failed',
@@ -140,13 +140,13 @@
           showConfirmButton: false,
           timer: 2000
         });
-        fetchDepartments(); // Refresh the doctors list after deletion
+        fetchDepartments(); // Refresh the department list after deletion
       } catch (error) {
-        console.error('Error removing doctor:', error);
+        console.error('Error removing department:', error);
         Swal.fire({
           icon: 'error',
           title: 'Failed!',
-          text: 'Failed to delete doctor. Please try again.',
+          text: 'Failed to delete department. Please try again.',
         });
       }
     }
@@ -170,8 +170,8 @@ return {
   <style scoped>
   @import "/public/assets/css/view.css";
   .add1 {
-  background-color: rgb(255, 255, 255);
-  color: #c86373;
+  background-color: #c86373;
+  color: white;
   border-color: #c86373;
   border-radius: 4px;
   border-width: thin;
@@ -182,11 +182,5 @@ return {
   gap: 8px;
   padding: 10px 20px;
   transition: background-color 0.3s ease;
-}
-.add1:hover{
- background-color: #c86373;
- color: #ffffff;
-
-
 }
   </style>

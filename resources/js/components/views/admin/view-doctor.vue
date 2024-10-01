@@ -31,11 +31,11 @@
                 <td>{{ doctor.phone }}</td>
                 <td>
                   <button class="action" @click="editDoctor(doctor.id)">
-                    <i class="fas fa-edit"></i> <!-- Edit icon -->
+                    <i class="fas fa-edit"></i>
                   </button>       
-                    <button class="action" @click="removeDoctor(doctor.id)">
-                      <i class="fas fa-trash-alt"></i> <!-- Remove/Delete icon -->
-                    </button>
+                  <button class="action" @click="removeDoctor(doctor.id)">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </td>
               </tr>
             </tbody> 
@@ -44,6 +44,7 @@
       </div>
     </div>
 
+    <!-- Add Doctor Modal -->
     <div v-if="showAddDoctorModal" class="modal-backdrop">
       <div class="modal-content">
         <button class="close-icon" @click="showAddDoctorModal = false"><i class="fas fa-times"></i></button>
@@ -51,10 +52,10 @@
         <form @submit.prevent="registerDoctor">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" v-model="form.name" />
+            <input type="text" id="name" v-model="form.name" required />
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">Email</label>    
             <input type="email" id="email" v-model="form.email" required />
           </div>
           <div class="form-group">
@@ -62,11 +63,9 @@
             <div class="custom-select-wrapper">
               <select id="department" v-model="form.department" required>
                 <option value="" disabled>Select Department</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="Orthopedics">Orthopedics</option>
-                <option value="Gynecology">Gynecology</option>
+                <option v-for="department in departments" :key="department.id" :value="department.name">
+                  {{ department.name }}
+                </option>
               </select>
             </div>
           </div>
@@ -89,6 +88,8 @@
         </form>
       </div>
     </div>
+
+    <!-- Edit Doctor Modal -->
     <div v-if="showEditDoctorModal" class="modal-backdrop">
       <div class="modal-content">
         <button class="close-icon" @click="showEditDoctorModal = false">
@@ -109,11 +110,9 @@
             <div class="custom-select-wrapper">
               <select id="department" v-model="form.department" required>
                 <option value="" disabled>Select Department</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="Orthopedics">Orthopedics</option>
-                <option value="Gynecology">Gynecology</option>
+                <option v-for="department in departments" :key="department.id" :value="department.name">
+                  {{ department.name }}
+                </option>
               </select>
             </div>
           </div>
@@ -125,17 +124,17 @@
             <button type="submit" class="btn btn-add">Update</button>
           </div>
         </form>
-        </div>
-        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import AdminSidebar from "../../layoutComponents/AdminSidebar.vue";
 import Navbar from "../../layoutComponents/Navbar.vue";
-import axios from 'axios'; // Import axios for API calls
-import { ref } from 'vue';
-import Swal from "sweetalert2"; // Ensure to use ref for reactive variables
+import axios from 'axios';
+import { ref,watch } from 'vue';
+import Swal from "sweetalert2";
 
 export default {
   name: "Doctor",
@@ -145,6 +144,7 @@ export default {
   },
   setup() {
     const doctors = ref([]);
+    const departments = ref([]);
     const error = ref(null);
     const showAddDoctorModal = ref(false);
     const showEditDoctorModal = ref(false);
@@ -154,25 +154,35 @@ export default {
       name: "",
       email: "",
       department: "",
-      phone:    "",
+      phone: "",
       password: "",
       confirmpassword: "",
     });
 
-    // Function to fetch doctors
+    // Fetch doctors and departments
     const fetchDoctors = async () => {
       try {
-        const response = await axios.post('/doctors'); // Use the POST method with the appropriate endpoint
-        doctors.value = response.data; // Update the reactive doctors array
+        const response = await axios.post('/doctors');
+        doctors.value = response.data;
       } catch (error) {
         console.error('Error fetching doctors:', error);
-        error.value = 'Failed to load doctors. Please try again.'; // Handle the error
+        error.value = 'Failed to load doctors. Please try again.';
+      }
+    };
+
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.post('/departments');
+        departments.value = response.data;
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+        error.value = 'Failed to load departments. Please try again.';
       }
     };
 
     const registerDoctor = async () => {
       try {
-        await axios.post('/add-doctors', form.value); // Use the form data for adding a new doctor
+        await axios.post('/add-doctors', form.value);
         Swal.fire({
           icon: 'success',
           title: 'Doctor registered successfully',
@@ -180,11 +190,10 @@ export default {
           position: 'top-end',
           showConfirmButton: false,
           timer: 2000,
-          padding: '2em',
         });
-        showAddDoctorModal.value = false; // Close modal
-        resetForm(); // Reset the form after successful registration
-        fetchDoctors(); // Re-fetch doctors after adding
+        showAddDoctorModal.value = false;
+        resetForm();
+        fetchDoctors();
       } catch (error) {
         console.error('Error registering doctor:', error);
         Swal.fire({
@@ -196,51 +205,71 @@ export default {
     };
 
     const editDoctor = async (id) => {
-  try {
-    const response = await axios.get(`/doctors/${id}/edit`);
-    console.log('API Response:', response.data); // Log response to verify the structure
-
-    const doctorData = response.data; // Access data directly if there's no `doctor` key
-    
-    form.value = {
-  name: doctorData?.name || '',
-  email: doctorData?.email || '',
-  department: doctorData?.department || '',
-  phone: doctorData?.phone || '',
-  password: '',
-  confirmpassword: '',
-};
-
-
-    editingDoctorId.value = id;
-    showEditDoctorModal.value = true;
-  } catch (error) {
-    console.error('Error fetching doctor details:', error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to fetch doctor data',
-      text: 'An error occurred while fetching the doctor data. Please try again.',
-    });
-  }
-};
+      try {
+        const response = await axios.get(`/doctors/${id}/edit`);
+        const doctorData = response.data;
+        form.value = {
+          name: doctorData?.name || '',
+          email: doctorData?.email || '',
+          department: doctorData?.department || '',
+          phone: doctorData?.phone || '',
+          password: '',
+          confirmpassword: '',
+        };
+        editingDoctorId.value = id;
+        showEditDoctorModal.value = true;
+      } catch (error) {
+        console.error('Error fetching doctor details:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to fetch doctor data',
+          text: 'An error occurred while fetching the doctor data. Please try again.',
+        });
+      }
+    };
 
     const updateDoctor = async () => {
-  try {
-    await axios.put(`/doctors/${editingDoctorId.value}`, form.value);
-    Swal.fire({
-      icon: 'success',
-      title: 'Doctor updated successfully',
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2000,
-    });
-    showEditDoctorModal.value = false; // Close the modal
-    fetchDoctors(); // Refresh the doctor list
-  } catch (error) {
-    console.error('Error updating doctor:', error);
-  }
-};
+      try {
+        await axios.put(`/doctors/${editingDoctorId.value}`, form.value);
+        Swal.fire({
+          icon: 'success',
+          title: 'Doctor updated successfully',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        showEditDoctorModal.value = false;
+        fetchDoctors();
+      } catch (error) {
+        console.error('Error updating doctor:', error);
+      }
+    };
+
+    const removeDoctor = async (doctorId) => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.delete(`/doctors/${doctorId}`);
+            fetchDoctors();
+            Swal.fire('Deleted!', 'The doctor has been removed.', 'success');
+          } catch (error) {
+            console.error('Error removing doctor:', error);
+            Swal.fire('Error!', 'Failed to remove the doctor.', 'error');
+          }
+        }
+      });
+    };
+
     const resetForm = () => {
       form.value = {
         name: "",
@@ -252,63 +281,34 @@ export default {
       };
     };
 
-    const removeDoctor = async (doctorId) => {
-  // Show confirmation dialog before deletion
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // If user confirms deletion
-      try {
-        await axios.delete(`/doctors/${doctorId}`); // API call for deletion
-        Swal.fire({
-          toast:true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'Doctor has been deleted.',
-          showConfirmButton: false,
-          timer: 2000
-        });
-        fetchDoctors(); // Refresh the doctors list after deletion
-      } catch (error) {
-        console.error('Error removing doctor:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed!',
-          text: 'Failed to delete doctor. Please try again.',
-        });
-      }
-    }
-  });
-};
+    // Watchers for modals to load departments when they open
+    watch(showAddDoctorModal, (newValue) => {
+      if (newValue === true) fetchDepartments();
+    });
 
-    // Fetch doctors when the component is mounted
+    watch(showEditDoctorModal, (newValue) => {
+      if (newValue === true) fetchDepartments();
+    });
+
     fetchDoctors();
 
     return {
       doctors,
-      error,
-      showAddDoctorModal,
       form,
-      fetchDoctors,
+      showAddDoctorModal,
+      showEditDoctorModal,
+      editingDoctorId,
+      departments,
+      error,
       registerDoctor,
-      resetForm,
-      removeDoctor,
       editDoctor,
       updateDoctor,
-      showEditDoctorModal,
+      removeDoctor,
+      resetForm,
     };
   },
 };
 </script>
-
 
 <style scoped>
 @import "/public/assets/css/view.css";

@@ -34,9 +34,9 @@
           <div class="col-md-4">
             <div class="card text-center">
               <div class="card-body">
-                <router-link to="/view-appointment" class="no-underline">
-                <h5 class="card-title">Number of Appointments</h5>
-                <p class="card-text">{{ numberOfAppointments }}</p>
+                <router-link to="/view-department" class="no-underline">
+                <h5 class="card-title">Number of Departments</h5>
+                <p class="card-text">{{ numberOfDepartments }}</p>
                 </router-link>
               </div>
             </div>
@@ -63,11 +63,12 @@ export default {
     return {
       numberOfDoctors: 0, // Array to hold the list of doctors
       numberOfPatients: 0, // Number of patients (initialize as needed)
-      numberOfAppointments: 0, // Number of appointments (initialize as needed)
+      numberOfDepartments: 0, // Number of appointments (initialize as needed)
     };
   },
   mounted() {
-    this.fetchStats(); // Fetch statistics when component is mounted
+    this.fetchStats();
+    this.fetchdepartment(); // Fetch statistics when component is mounted
   },
   methods: {
     fetchStats() {
@@ -78,10 +79,18 @@ export default {
         })
         .catch(error => {
           console.error('Error fetching doctors:', error);
-        });
-
-      
+        });   
     },
+
+    fetchdepartment() {
+      axios.post('/departments')
+      .then(response => {
+        this.numberOfDepartments = response.data.length;
+      })
+      .catch(error => {
+        console.error('Error fetching departments:', error);
+      });
+    }
   },
 };
 </script>
