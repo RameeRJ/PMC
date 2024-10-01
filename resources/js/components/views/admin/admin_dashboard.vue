@@ -14,24 +14,30 @@
           <div class="col-md-4">
             <div class="card text-center">
               <div class="card-body">
+                <router-link to="/view-doctor" class="no-underline">
                 <h5 class="card-title">Number of Doctors</h5>
-                <p class="card-text">{{ doctors.length }}</p>
+                <p class="card-text">{{ numberOfDoctors }}</p>
+              </router-link>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="card text-center">
               <div class="card-body">
+                <router-link to="/view-patients" class="no-underline">
                 <h5 class="card-title">Number of Patients</h5>
                 <p class="card-text">{{ numberOfPatients }}</p>
+                </router-link>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="card text-center">
               <div class="card-body">
+                <router-link to="/view-appointment" class="no-underline">
                 <h5 class="card-title">Number of Appointments</h5>
                 <p class="card-text">{{ numberOfAppointments }}</p>
+                </router-link>
               </div>
             </div>
           </div>
@@ -55,7 +61,7 @@ export default {
   },
   data() {
     return {
-      doctors: [], // Array to hold the list of doctors
+      numberOfDoctors: 0, // Array to hold the list of doctors
       numberOfPatients: 0, // Number of patients (initialize as needed)
       numberOfAppointments: 0, // Number of appointments (initialize as needed)
     };
@@ -66,9 +72,9 @@ export default {
   methods: {
     fetchStats() {
       // Fetch the list of doctors from your API
-      axios.get('/doctor') // Replace with your actual endpoint
+      axios.post('/doctors') // Replace with your actual endpoint
         .then(response => {
-          this.doctors = response.data; // Assume response contains an array of doctors
+          this.numberOfDoctors = response.data.length; // Assume response contains an array of doctors
         })
         .catch(error => {
           console.error('Error fetching doctors:', error);
@@ -92,6 +98,10 @@ h1 {
 }
 body {
   background: tan;
+}
+.no-underline {
+  text-decoration: none;
+  color: rgb(0, 0, 0); /* Remove underline from links */
 }
 
 @media (max-width: 768px) {

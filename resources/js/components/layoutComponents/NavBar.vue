@@ -25,25 +25,41 @@ export default {
   methods: {
     async logout() {
       try {
-        await axios.post('/logout');
-        
-        // Clear local storage or session data if required
-        localStorage.removeItem('authToken');
-
-        // Redirect the user to the login page
-        this.$router.push({ name: 'index' });
-
-        // Optionally, show a success message (if using a toast system)
-        Swal.fire({
-      icon: 'success',
-      title: 'Logged out successfully',
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 2000,
+        const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log me out!',
+      cancelButtonText: 'Cancel',
       padding: '1em',
     });
-  } catch (error) {
+
+    // Check if the user confirmed the logout action
+    if (result.isConfirmed) {
+      // Proceed with logout
+      await axios.post('/logout');
+      
+      // Clear local storage or session data if required
+      localStorage.removeItem('authToken');
+
+      // Redirect the user to the login page
+      this.$router.push({ name: 'index' });
+
+      // Show success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Logged out successfully',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        padding: '1em',
+      });
+    } 
+  }catch (error) {
     console.error('Error logging out:', error);
     Swal.fire({
       icon: 'error',

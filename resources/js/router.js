@@ -83,6 +83,38 @@ const routes = [
         /* webpackChunkName: "home" */ './components/views/admin/view-doctor.vue'
       ),
   },
+  {
+    path: '/view-schedule',
+    name: 'view-schedule',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/view-schedule.vue'
+      ),
+  },
+  {
+    path: '/view-appointment',
+    name: 'view-appointment',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/view-appointment.vue'
+      ),
+  },
+  {
+    path: '/view-patients',
+    name: 'view-patients',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/view-patients.vue'
+      ),
+  },
+  {
+    path: '/view-department',
+    name: 'view-department',
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ './components/views/admin/view-department.vue'
+      ),
+  },
 ];
 
 // Create the router instance

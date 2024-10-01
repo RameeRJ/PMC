@@ -30,9 +30,9 @@
                 <td>{{ doctor.department }}</td>
                 <td>{{ doctor.phone }}</td>
                 <td>
-                    <button class="action">
-                      <i class="fas fa-edit"></i> <!-- Edit icon -->
-                    </button>         
+                  <button class="action" @click="editDoctor(doctor.id)">
+                    <i class="fas fa-edit"></i> <!-- Edit icon -->
+                  </button>       
                     <button class="action" @click="removeDoctor(doctor.id)">
                       <i class="fas fa-trash-alt"></i> <!-- Remove/Delete icon -->
                     </button>
@@ -58,18 +58,18 @@
             <input type="email" id="email" v-model="form.email" required />
           </div>
           <div class="form-group">
-  <label for="department">Department</label>
-  <div class="custom-select-wrapper">
-    <select id="department" v-model="form.department" required>
-      <option value="" disabled>Select Department</option>
-      <option value="Cardiology">Cardiology</option>
-      <option value="Neurology">Neurology</option>
-      <option value="Pediatrics">Pediatrics</option>
-      <option value="Orthopedics">Orthopedics</option>
-      <option value="Gynecology">Gynecology</option>
-    </select>
-  </div>
-</div>
+            <label for="department">Department</label>
+            <div class="custom-select-wrapper">
+              <select id="department" v-model="form.department" required>
+                <option value="" disabled>Select Department</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Gynecology">Gynecology</option>
+              </select>
+            </div>
+          </div>
           <div class="form-group">
             <label for="phone">Phone</label>
             <input type="text" id="phone" v-model="form.phone" required />
@@ -89,6 +89,44 @@
         </form>
       </div>
     </div>
+    <div v-if="showEditDoctorModal" class="modal-backdrop">
+      <div class="modal-content">
+        <button class="close-icon" @click="showEditDoctorModal = false">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3 class="center">Edit Doctor</h3>
+        <form @submit.prevent="updateDoctor">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" v-model="form.name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" v-model="form.email" required />
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <div class="custom-select-wrapper">
+              <select id="department" v-model="form.department" required>
+                <option value="" disabled>Select Department</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Orthopedics">Orthopedics</option>
+                <option value="Gynecology">Gynecology</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" v-model="form.phone" required />
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn btn-add">Update</button>
+          </div>
+        </form>
+        </div>
+        </div>
   </div>
 </template>
 
@@ -100,7 +138,7 @@ import { ref } from 'vue';
 import Swal from "sweetalert2"; // Ensure to use ref for reactive variables
 
 export default {
-  name: "AdminHome",
+  name: "Doctor",
   components: {
     AdminSidebar,
     Navbar,
@@ -109,6 +147,8 @@ export default {
     const doctors = ref([]);
     const error = ref(null);
     const showAddDoctorModal = ref(false);
+    const showEditDoctorModal = ref(false);
+    const editingDoctorId = ref(null);
 
     const form = ref({
       name: "",
@@ -155,6 +195,52 @@ export default {
       }
     };
 
+    const editDoctor = async (id) => {
+  try {
+    const response = await axios.get(`/doctors/${id}/edit`);
+    console.log('API Response:', response.data); // Log response to verify the structure
+
+    const doctorData = response.data; // Access data directly if there's no `doctor` key
+    
+    form.value = {
+  name: doctorData?.name || '',
+  email: doctorData?.email || '',
+  department: doctorData?.department || '',
+  phone: doctorData?.phone || '',
+  password: '',
+  confirmpassword: '',
+};
+
+
+    editingDoctorId.value = id;
+    showEditDoctorModal.value = true;
+  } catch (error) {
+    console.error('Error fetching doctor details:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to fetch doctor data',
+      text: 'An error occurred while fetching the doctor data. Please try again.',
+    });
+  }
+};
+
+    const updateDoctor = async () => {
+  try {
+    await axios.put(`/doctors/${editingDoctorId.value}`, form.value);
+    Swal.fire({
+      icon: 'success',
+      title: 'Doctor updated successfully',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+    showEditDoctorModal.value = false; // Close the modal
+    fetchDoctors(); // Refresh the doctor list
+  } catch (error) {
+    console.error('Error updating doctor:', error);
+  }
+};
     const resetForm = () => {
       form.value = {
         name: "",
@@ -215,6 +301,9 @@ export default {
       registerDoctor,
       resetForm,
       removeDoctor,
+      editDoctor,
+      updateDoctor,
+      showEditDoctorModal,
     };
   },
 };

@@ -20,7 +20,7 @@
               <table border="0" class="profile-container">
                 <tr>
                   <td width="30%" style="padding-left:20px">
-                    <!-- <img src="@/assets/images/logo.svg"" alt="user" width="100%" style="border-radius:50%"> -->
+                    <img :src="defaultProfileImage" alt="user" width="100%">
                   </td>
                   <td style="padding:0px;margin:0px;">
                     <p class="profile-title">{{ user ? user.name : 'Guest' }}</p>
@@ -51,10 +51,24 @@
               </router-link>
             </td>
           </tr>
+
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-schedule">
-              <router-link to="/schedule" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-department') }">
+              <router-link to="/view-department" class="non-style-link-menu">
+                <div class="menu-item">
+                  <i class="fas fa-user-md"></i>
+                  <p class="menu-text">Departments</p>
+                </div>
+              </router-link>
+            </td>
+          </tr>
+
+
+          <tr class="menu-spacer"><td></td></tr>
+          <tr class="menu-row">
+            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-schedule') }">
+              <router-link to="/view-schedule" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-calendar-alt"></i>
                   <p class="menu-text">Schedule</p>
@@ -64,8 +78,8 @@
           </tr>
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-appointment">
-              <router-link to="/appointment" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-appointment') }">
+              <router-link to="/view-appointment" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-calendar-check"></i>
                   <p class="menu-text">Appointment</p>
@@ -75,8 +89,8 @@
           </tr>
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-patient">
-              <router-link to="/patients" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/view-patients') }">
+              <router-link to="/view-patients" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-procedures"></i>
                   <p class="menu-text">Patients</p>
@@ -94,6 +108,7 @@
     name: 'AdminSidebar',
     data() {
       return {
+        defaultProfileImage: '/storage/assets/images/default.jpg',
         isSidebarOpen: true,
         user: null, // Initial state of the sidebar
       };
@@ -120,6 +135,16 @@
   <style scoped>
   @import "/public/assets/css/admin.css";
   
+  img{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-left:-10px;
+    margin-top:-26px;
+    border:thick;
+    border-color: turquoise;
+
+  }
   
   .menu {
   width: 250px; /* Default sidebar width */
@@ -171,6 +196,12 @@
     .menu-spacer {
       display: none; /* Hide spacer on smaller screens */
     }
+    .menu-active {
+    width: 172px;
+  }
+  .profile-subtitle {
+    font-size: 11px;
+  }
   }
   
   /* Button Style */
