@@ -1,0 +1,201 @@
+/* Admin sidebar styling */
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+
+
+.container {
+    display: flex;
+    height: 100%;
+  }
+  
+  .menu {
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+  }
+  
+  .menu-container {
+    width: 100%;
+  }
+  
+  .profile-container {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .profile-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .profile-subtitle {
+    font-size: 14px;
+    color: #999;
+  }
+  
+  .logout-btn {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 5px;
+    margin-top: 10px;
+    background-color: #c863733d;
+    color: #c86373;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.5px;
+  }
+  .logout-btn:hover {
+    background-color: #c86373; /* Change to the color you want on hover */
+    color: white; /* Optional: Change text color on hover */
+  }
+  
+  .menu-row {
+    padding: 10px 0;
+  }
+  
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  
+  .menu-btn:hover {
+    background-color: #f37c9030;
+  }
+  
+  .menu-active {
+    background-color: #d6718255;
+    border-right: 7px solid #c86373;
+  }
+
+  .menu-active i {
+    color: #c86373;
+  }
+
+
+  .menu-active .menu-text {
+    color: #c86373;
+  }
+  
+  .menu-icon-dashbord,
+  .menu-icon-doctor,
+  .menu-icon-schedule,
+  .menu-icon-appointment,
+  .menu-icon-patient {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-icon-dashbord-active i,
+  .menu-icon-doctor i,
+  .menu-icon-schedule i,
+  .menu-icon-appointment i,
+  .menu-icon-patient i {
+    font-size: 20px;
+  }
+  
+  .menu-icon-dashbord-active {
+    color: #c86373;
+  }
+  
+  .non-style-link-menu {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    align-items: center;
+  }
+  
+  .non-style-link-menu-active {
+    color: #c86373;
+  }
+  
+  .menu-icon-dashbord i:before {
+    content: "\f1fe"; /* FontAwesome dashboard icon */
+  }
+  
+  .menu-icon-doctor i:before {
+    content: "\f0f0"; /* FontAwesome doctor icon */
+  }
+  
+  .menu-icon-schedule i:before {
+    content: "\f073"; /* FontAwesome calendar icon */
+  }
+  
+  .menu-icon-appointment i:before {
+    content: "\f274"; /* FontAwesome bookmark icon */
+  }
+  
+  .menu-icon-patient i:before {
+    content: "\f193"; /* FontAwesome wheelchair icon */
+  }
+  .menu-spacer {
+    height: 4px; /* Adjust the height as needed */
+    background-color:#e7f7ff; /* Set the desired color for the spacer */
+  }
+  
+  /* Optional: Additional styling to improve the look */
+  body {
+    font-family: Arial, sans-serif;
+  }
+  @media (max-width: 768px) {
+   
+  
+    .menu-btn {
+      padding: 10px; /* Adjust padding for icon-only buttons */
+    }
+    .menu {
+      width: 170px; /* Set width for the menu */
+    }
+  
+    .menu-closed {
+      transform: translateX(-100%); /* Hide the sidebar when closed */
+    }
+  
+
+  
+    .menu-spacer {
+      display: none; /* Hide spacer on smaller screens */
+    }
+  }
+  
+  @media (max-width: 468px) {
+    .menu-text {
+      display: none; /* Hide text on smaller screens */
+    }
+  
+    .menu-btn {
+      justify-content: center; /* Center the icon in the button */
+      padding: 10px; /* Adjust padding for icon-only buttons */
+    }
+    .menu {
+      width: 150px; /* Set width for the menu */
+    }
+  
+    .menu-closed {
+      transform: translateX(-100%); /* Hide the sidebar when closed */
+    }
+  
+
+  
+    .menu-spacer {
+      display: none; /* Hide spacer on smaller screens */
+    }
+  }
+  
+  /* Button Style */
+  .navbar-toggler {
+    display: block; /* Show button */
+    margin: 10px; /* Adjust margin as needed */
+    background-color: #007bff; /* Button color */
+    border: none;
+    padding: 10px;
+    color: white; /* Icon color */
+  }

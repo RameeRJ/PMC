@@ -5,33 +5,48 @@
       <table border="0">
         <tr>
           <td width="80%">
-            <font class="edoc-logo">PMC. </font>
-            <font class="edoc-logo-sub">| PATHAMBAD MEDICAL CENTER</font>
+            
+              <font class="edoc-logo">PMC. </font>
+              <font class="edoc-logo-sub">| PATHAMBAD MEDICAL CENTER</font>
+            
           </td>
-          <td width="12%">
+          <td width="5%">
             <router-link to="/login" class="non-style-link">
-              <p class="nav-item">LOGIN</p>
+              <p class="nav-item" style="padding-right: 10px; margin-right:10px;">LOGIN</p>
             </router-link>
           </td>
-          <td width="10%">
+          <td width="5%">
             <router-link to="/signup" class="non-style-link">
-              <p class="nav-item" style="padding-right: 10px;">REGISTER</p>
+              <p class="nav-item" style="padding-right: 10px; margin-right:10px;">REGISTER</p>
+            </router-link>
+          </td>
+        
+
+        <td width="5%">
+            <router-link to="/about" class="non-style-link">
+              <p class="nav-item" style="padding-right: 10px; margin-right:10px;">ABOUT</p>
+            </router-link>
+          </td>
+
+          <td width="5%">
+            <router-link to="/contact" class="non-style-link">
+              <p class="nav-item" style="padding-right: 10px; ">CONTACT</p>
             </router-link>
           </td>
         </tr>
 
         <tr>
-          <td colspan="3">
+          <td colspan="5">
             <p class="heading-text">No More Delays.</p>
           </td>
         </tr>
         
         <tr>
-          <td colspan="3">
+          <td colspan="5">
             <p class="sub-text2">
               Skip the hassle and long waits!<br />
               Find your doctor online, book as you wish with PMC. <br />
-              Enjoy free doctor appointment booking services. Schedule your visit today!"
+              Enjoy free doctor appointment booking services. Schedule your visit today!
             </p>
           </td>
        
@@ -53,7 +68,4 @@ export default {
 @import "/public/assets/css/index.css";
 @import "/public/assets/css/main.css";
 
-table {
-  animation: transitionIn-Y-bottom 0.5s;
-}
 </style>

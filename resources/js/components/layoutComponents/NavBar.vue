@@ -1,34 +1,103 @@
 <template>
-    
-    <div class="navbar">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <router-link to="/Home" class="nav-link active d-flex flex-column text-center" aria-current="page" ><i class="fas fa-home fa-lg"></i><span class="small">Home</span></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/Login" class="nav-link active d-flex flex-column text-center" aria-current="page"><i class="fas fa-home fa-lg"></i><span class="small">Login</span></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/SignUp" class="nav-link active d-flex flex-column text-center" aria-current="page" ><i class="fas fa-home fa-lg"></i><span class="small">Register</span></router-link >
-          </li>
-        </ul>
-            
-      </nav>
+  <div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-light" style="background-color: #c863733d;">
+      <div class="container-fluid">
+        <!-- Navbar content -->
+        <span class="navbar-brand">PMC.| PATHAMBAD MEDICAL CENTER</span>
+
+        <!-- Logout Button -->
+        <button @click="logout" class="btn btn-danger logout-btn">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Rest of the dashboard content -->
+    <div class="dashboard-content">
+      <!-- Your dashboard content here -->
     </div>
+  </div>
 </template>
 
-
 <script>
-export default{
-    name: 'NavBar',
-}
+import axios from 'axios';
+import Swal from 'sweetalert2';
+export default {
+  methods: {
+    async logout() {
+      try {
+        const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log me out!',
+      cancelButtonText: 'Cancel',
+      padding: '1em',
+    });
 
+    // Check if the user confirmed the logout action
+    if (result.isConfirmed) {
+      // Proceed with logout
+      await axios.post('/logout');
+      
+      // Clear local storage or session data if required
+      localStorage.removeItem('authToken');
+
+      // Redirect the user to the login page
+      this.$router.push({ name: 'index' });
+
+      // Show success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Logged out successfully',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        padding: '1em',
+      });
+    } 
+  }catch (error) {
+    console.error('Error logging out:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error logging out',
+      text: 'Please try again later.',
+    });
+  }
+}}}
 </script>
 
-<style >
+<style scoped>
+.logout-btn {
+  padding: 8px 16px;
+  background-color: #c86373;
+  color: whitesmoke;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
+  font-size: 16px;
+  
 
- 
+}
 
+.logout-btn:hover {
+  background-color: #e35c73;
+  color:white
+}
+.navbar{
+  padding: 0%;
 
+}
+.navbar-brand{
+  font-size: 16px;
+  padding-top: 19px;
+  font-weight: 500;
+  color: #c86373;
+  height: 62px;
+}
 </style>

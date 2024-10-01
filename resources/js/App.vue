@@ -10,7 +10,6 @@
   
   <script>
   
-  import NavBar from './components/layoutComponents/NavBar.vue'
   // import HomeMsg from './components/Home.vue'
   // import LoginPage from './components/Login.vue'
   // import SignUp from './components/SignUp.vue'

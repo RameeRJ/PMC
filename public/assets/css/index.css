@@ -2,7 +2,7 @@ body{
     background-image:url("/public/assets/images/doctor-index.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: cover;
+    background-size:  cover;
     height: 100%;
 }
 
@@ -63,6 +63,10 @@ table{
     font-size: 12px;
 
 }
+.edoc-logo-sub:hover{
+  color: #f0f0f0;
+
+}
 
 
 .nav-item{
@@ -93,3 +97,91 @@ table{
     background-size: cover;
     height: 100%;
 }
+@media (max-width: 768px) {
+    .logo {
+      font-size: 1.2em;
+      white-space: nowrap; 
+    }
+    .edoc-logo-sub {
+      font-size: 0.9em; /* Smaller text for mobile */
+      white-space: nowrap; 
+      padding-left:15px;
+    }
+  
+    .heading-text {
+      font-size: 1.5em;
+    }
+  
+    .sub-text2 {
+      font-size: 1em;
+    }
+  
+    .nav-links {
+      flex-direction: column;
+    }
+  
+    .nav-item {
+      font-size: 9px;
+      padding: 2px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo {
+      font-size: 1.2em;
+      white-space: nowrap; 
+    }
+    .edoc-logo-sub {
+      font-size: 0.9em; /* Smaller text for mobile */
+      white-space: nowrap; 
+      padding-left:15px;
+    }
+  
+    .heading-text {
+      font-size: 1.2em;
+    }
+  
+    .sub-text2 {
+      font-size: 0.9em;
+      padding: 0 10px;
+    }
+  
+    .nav-links {
+      flex-direction: column;
+    }
+  
+    .nav-item {
+      font-size: 7px;
+      padding: 2px;
+    }
+    @media (max-width: 768px) {
+      .nav-item {
+        font-size: 9px;
+        padding: 2px;
+      }
+    
+      .heading-text {
+        font-size: 1.5em;
+      }
+    
+      .sub-text2 {
+        font-size: 1em;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-item {
+        font-size: 7px;
+        padding: 2px;
+      }
+    
+      .heading-text {
+        font-size: 1.2em;
+      }
+    
+      .sub-text2 {
+        font-size: 0.9em;
+        padding: 0 10px;
+      }
+    }
+  }
