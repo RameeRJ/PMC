@@ -42,11 +42,11 @@
         </tr>
           <tr class="menu-spacer"><td></td></tr>
           <tr class="menu-row">
-            <td class="menu-btn menu-icon-schedule" :class="{ 'menu-active': isActive('/my-session') }">
-              <router-link to="/my-session" class="non-style-link-menu">
+            <td class="menu-btn menu-icon-schedule" :class="{ 'menu-active': isActive('/my-schedules') }">
+              <router-link to="/my-schedules" class="non-style-link-menu">
                 <div class="menu-item">
                   <i class="fas fa-user-md"></i>
-                  <p class="menu-text">My Session</p>
+                  <p class="menu-text">My Schedules</p>
                 </div>
               </router-link>
             </td>

@@ -59,39 +59,6 @@
       DoctorSidebar,
       Navbar
     },
-    data() {
-      return {
-        numberOfDoctors: 0, // Array to hold the list of doctors
-        numberOfPatients: 0, // Number of patients (initialize as needed)
-        numberOfDepartments: 0, // Number of appointments (initialize as needed)
-      };
-    },
-    mounted() {
-      this.fetchStats();
-      this.fetchdepartment(); // Fetch statistics when component is mounted
-    },
-    methods: {
-      fetchStats() {
-        // Fetch the list of doctors from your API
-        axios.post('/doctors') // Replace with your actual endpoint
-          .then(response => {
-            this.numberOfDoctors = response.data.length; // Assume response contains an array of doctors
-          })
-          .catch(error => {
-            console.error('Error fetching doctors:', error);
-          });   
-      },
-
-      fetchdepartment() {
-        axios.post('/departments')
-        .then(response => {
-          this.numberOfDepartments = response.data.length;
-        })
-        .catch(error => {
-          console.error('Error fetching departments:', error);
-        });
-      }
-    },
   };
   </script>
 

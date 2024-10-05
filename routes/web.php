@@ -4,6 +4,7 @@ use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DoctorController;
 
 Route::get('/{any}' , [AppController::class, 'index'])->where('any', '.*');
 Route::post('/register', [AuthController::class, 'register']);
@@ -21,3 +22,9 @@ Route::put('/doctors/{id}', [AdminController::class, 'updateDoctor']); // Update
 Route::post('/add-departments', [AdminController::class, 'Depstore']); // Add a new department
 Route::post('/departments', [AdminController::class, 'Depindex']); // Get all departments
 Route::delete('/departments/{id}', [AdminController::class, 'Depdestroy']); // Delete a department
+
+
+Route::post('/schedules/{doctorId}', [DoctorController::class, 'getSchedules']);
+Route::post('/schedules', [DoctorController::class, 'Schedulestore']);
+Route::post('/get-doctor-id', [DoctorController::class, 'getDoctorIdByEmail']);
+Route::delete('/schedules/{id}', [DoctorController::class, 'removeSchedule']);

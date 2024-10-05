@@ -116,11 +116,11 @@ const routes = [
       ),
   },
   {
-    path: '/my-session',
-    name: 'my-session',
+    path: '/my-schedules',
+    name: 'my-schedules',
     component: () =>
       import(
-        /* webpackChunkName: "home" */ './components/views/doctor/my-session.vue'
+        /* webpackChunkName: "home" */ './components/views/doctor/my-schedules.vue'
       ),
   },
   {

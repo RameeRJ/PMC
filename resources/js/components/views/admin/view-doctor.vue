@@ -24,6 +24,9 @@
               </tr>
             </thead>
             <tbody>
+              <tr v-if="doctors.length === 0">
+                <td colspan="6" class="text-center">No doctors available</td>
+              </tr>
               <tr v-for="doctor in doctors" :key="doctor.id">
                 <td>{{ doctor.name }}</td>
                 <td>{{ doctor.email }}</td>
@@ -261,7 +264,14 @@ export default {
           try {
             await axios.delete(`/doctors/${doctorId}`);
             fetchDoctors();
-            Swal.fire('Deleted!', 'The doctor has been removed.', 'success');
+            Swal.fire({
+      icon: 'success',
+      title: 'Doctor removed successfully',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+    });
           } catch (error) {
             console.error('Error removing doctor:', error);
             Swal.fire('Error!', 'Failed to remove the doctor.', 'error');

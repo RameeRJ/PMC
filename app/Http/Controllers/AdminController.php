@@ -43,13 +43,20 @@ class AdminController extends Controller
     }
 
     public function docDestroy($id)
-    {
-        // Soft delete the doctor
-        $doctor = Doctor::findOrFail($id);
-        $doctor->delete(); // Soft delete the doctor
-        
-        return response()->json(['message' => 'Doctor soft deleted successfully']);
-    }
+{
+    // Find the doctor and associated user
+    $doctor = Doctor::with('user')->findOrFail($id);
+    $user = $doctor->user;
+
+    // Soft delete the doctor
+    $doctor->delete();
+
+    // Soft delete the associated user
+    $user->delete();
+
+    return response()->json(['message' => 'Doctor and associated user soft deleted successfully']);
+}
+
     public function editDoctor($id)
     {
             $doctor = Doctor::with('user')->findOrFail($id);
