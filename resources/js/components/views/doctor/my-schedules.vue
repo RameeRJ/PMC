@@ -135,7 +135,7 @@ export default {
         schedules.value.push(response.data.schedule);
         Swal.fire({
           icon: 'success',
-          title: 'Doctor registered successfully',
+          title: 'Schedule added successfully',
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
