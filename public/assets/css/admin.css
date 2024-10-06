@@ -135,6 +135,9 @@
   .menu-icon-appointment i:before {
     content: "\f274"; /* FontAwesome bookmark icon */
   }
+  .menu-icon-settings i:before {
+    content: "\f013"; /* FontAwesome bookmark icon */
+  }
   
   .menu-icon-patient i:before {
     content: "\f487"; /* FontAwesome wheelchair icon */

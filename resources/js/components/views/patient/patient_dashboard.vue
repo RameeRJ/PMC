@@ -1,66 +1,60 @@
 <template>
-    <div class="dashboard-container">
-      <div class="sidebar">
-        <!-- Patient Sidebar -->
-        <div class="profile-section">
-          <p class="patient-name">Test Patient..</p>
-          <p class="patient-email">patient@edoc.com</p>
-          <button class="logout-btn">Log out</button>
-        </div>
-  
-        <nav>
-          <router-link to="/home" class="nav-item">Home</router-link>
-          <router-link to="/all-doctors" class="nav-item">All Doctors</router-link>
-          <router-link to="/scheduled-sessions" class="nav-item">Scheduled Sessions</router-link>
-          <router-link to="/my-bookings" class="nav-item">My Bookings</router-link>
-          <router-link to="/settings" class="nav-item">Settings</router-link>
-        </nav>
+  <NavBar />
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar Column (left) -->
+      <div class="col-md-3 col-lg-2 bg-light vh-100 p-0">
+        <PatientSidebar />
       </div>
-  
-      <div class="content">
-        <!-- Dashboard Content -->
-        <div class="header">
-          <h2>Welcome!</h2>
-          <h3>Test Patient.</h3>
-          <p>
-            Haven't any idea about doctors? No problem, let's jump to "All Doctors" section or "Sessions"
-            Track your past and future appointments history. Also find out the expected arrival time of your doctor or medical consultant.
-          </p>
-  
-          <div class="search-section">
-            <input type="text" placeholder="Test Doctor" />
-            <button class="search-btn">Search</button>
+      <!-- Main Content (right) -->
+      <div class="col-md-9 col-lg-10 p-4">
+        <div class="dashboard-header">
+          <h2>Welcome <span class="user-name">{{ user.name }}</span></h2>
+          <p>Manage your appointments, search for doctors, and review your medical history.</p>
+        </div>
+
+        <!-- Status Cards Section -->
+        <div class="status-section mb-4">
+          <h3>Status Overview</h3>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="status-card">
+                <img src="https://via.placeholder.com/100" alt="Doctor Icon" />
+                <p class="card-count">5</p>
+                <span class="card-label">Doctors Available</span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="status-card">
+                <img src="https://via.placeholder.com/100" alt="Patient Icon" />
+                <p class="card-count">20</p>
+                <span class="card-label">Patients Registered</span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="status-card">
+                <img src="https://via.placeholder.com/100" alt="Booking Icon" />
+                <p class="card-count">3</p>
+                <span class="card-label">New Bookings</span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="status-card">
+                <img src="https://via.placeholder.com/100" alt="Session Icon" />
+                <p class="card-count">2</p>
+                <span class="card-label">Today’s Sessions</span>
+              </div>
+            </div>
           </div>
         </div>
-  
-        <div class="status">
-          <h3>Status</h3>
-          <div class="status-cards">
-            <div class="card">
-              <p>1</p>
-              <span>All Doctors</span>
-            </div>
-            <div class="card">
-              <p>3</p>
-              <span>All Patients</span>
-            </div>
-            <div class="card">
-              <p>0</p>
-              <span>New Bookings</span>
-            </div>
-            <div class="card">
-              <p>0</p>
-              <span>Today Sessions</span>
-            </div>
-          </div>
-        </div>
-  
-        <div class="upcoming-bookings">
-          <h3>Your Upcoming Booking</h3>
-          <table class="booking-table">
+
+        <!-- Upcoming Bookings Section -->
+        <div class="upcoming-bookings-section">
+          <h3>Your Upcoming Bookings</h3>
+          <table class="table booking-table">
             <thead>
               <tr>
-                <th>Appoint. Number</th>
+                <th>#</th>
                 <th>Session Title</th>
                 <th>Doctor</th>
                 <th>Scheduled Date & Time</th>
@@ -69,119 +63,164 @@
             <tbody>
               <tr>
                 <td>1</td>
-                <td>Test Session</td>
-                <td>Test Doctor</td>
-                <td>2050-01-01 18:00</td>
+                <td>General Check-up</td>
+                <td>Dr. John Doe</td>
+                <td>2024-10-15 10:00 AM</td>
               </tr>
+              <tr>
+                <td>2</td>
+                <td>Cardiology Consultation</td>
+                <td>Dr. Sarah Lee</td>
+                <td>2024-10-20 12:00 PM</td>
+              </tr>
+              <!-- Add more bookings as needed -->
             </tbody>
           </table>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "PatientDashboard",
+  </div>
+</template>
+
+<script>
+import NavBar from '../../layoutComponents/NavBar.vue';
+import PatientSidebar from '../../layoutComponents/PatientSidebar.vue';
+
+export default {
+  name: "PatientDashboard",
+  components: {
+    PatientSidebar,
+    NavBar,
+  },
+  data() {
+    return {
+      user: {}
   };
-  </script>
-  
-  <style scoped>
-  .dashboard-container {
-    display: flex;
-  }
-  
-  .sidebar {
-    width: 20%;
-    background-color: #f8f9fa;
-    padding: 20px;
-  }
-  
-  .profile-section {
-    text-align: center;
-  }
-  
-  .avatar {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-  }
-  
-  .patient-name {
+},
+  mounted() {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+      }
+
+  },  
+}
+</script>
+
+<style scoped>
+/* Main container layout */
+.container-fluid {
+  padding: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+/* Dashboard header */
+.dashboard-header {
+  background-image: url("/public/assets/images/patient_dashboard.jpg");
+  background-repeat: no-repeat;
+  background-size:  cover;
+  color: #000000;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-position: center;
+  height: 200px;
+}
+
+.dashboard-header h2 {
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  font-size: 17px;
+  opacity: 1.8;
+  margin-top: 30px;
+  font-weight: 470;
+
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-box {
+  display: flex;
+}
+
+.search-box input {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.search-btn {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Status Cards */
+.status-section h3 {
+  margin-bottom: 20px;
+}
+
+.status-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.status-card .card-count {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.status-card .card-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Upcoming Bookings Section */
+.upcoming-bookings-section h3 {
+  margin-bottom: 20px;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.booking-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.booking-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.user-name {
+    color: #df536b; /* Example: tomato red color */
     font-weight: bold;
+    font-size: 28px;
+    text-transform: uppercase;
   }
-  
-  .logout-btn {
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .nav-item {
-    display: block;
-    margin: 20px 0;
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .content {
-    width: 80%;
-    padding: 20px;
-  }
-  
-  .header {
-    background-color: #eaf4fc;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .search-section {
-    display: flex;
-    margin-top: 20px;
-  }
-  
-  .search-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-left: 10px;
-  }
-  
-  .status {
-    margin-top: 20px;
-  }
-  
-  .status-cards {
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .card {
-    background-color: #f5f5f5;
-    padding: 20px;
-    text-align: center;
-    width: 20%;
-    border-radius: 8px;
-  }
-  
-  .upcoming-bookings {
-    margin-top: 20px;
-  }
-  
-  .booking-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .booking-table th,
-  .booking-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-  }
-  </style>
-  
+
+</style>
