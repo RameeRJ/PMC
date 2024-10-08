@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
 
 Route::get('/{any}' , [AppController::class, 'index'])->where('any', '.*');
 Route::post('/register', [AuthController::class, 'register']);
@@ -28,3 +29,7 @@ Route::post('/schedules/{doctorId}', [DoctorController::class, 'getSchedules']);
 Route::post('/schedules', [DoctorController::class, 'Schedulestore']);
 Route::post('/get-doctor-id', [DoctorController::class, 'getDoctorIdByEmail']);
 Route::delete('/schedules/{id}', [DoctorController::class, 'removeSchedule']);
+
+
+
+Route::post('/patient/schedules', [PatientController::class, 'getSchedules']);

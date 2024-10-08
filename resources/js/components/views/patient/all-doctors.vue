@@ -8,7 +8,6 @@
       <div class="col-md-9 col-lg-10 p-4">
         <div class="doctor-list-section">
           <div class="doctor-list-header d-flex justify-content-between align-items-center margin">
-            <!-- <h2>All Doctors ({{ doctors.length }})</h2> -->
             <input
         type="text"
         class="form-control"
@@ -26,16 +25,17 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <tr v-if="doctors.length === 0">
+              <tr v-if="!doctors ">
                 <td colspan="6" class="text-center">No doctors available</td>
-              </tr> -->
-              <tr v-for="doctor in doctors" :key="doctor.id">
+              </tr>
+              <tr v-for="doctor in filteredDoctors" :key="doctor.id">
                 <td>{{ doctor.name }}</td>
                 <td>{{ doctor.phone }}</td>
                 <td>{{ doctor.department }}</td>
                 <td>
                   <button class="action" @click="getSession(doctor.id)">
-                    <i class="fas fa-book-medical"></i>
+                    <span class="tooltip-text">Get Session</span> <!-- Custom tooltip -->
+                    <i class="fa-solid fa-file-waveform"></i>
                   </button>       
                 </td>
               </tr>
@@ -49,7 +49,7 @@
       <script>
       import PatientSidebar from "../../layoutComponents/PatientSidebar.vue";
       import Navbar from "../../layoutComponents/NavBar.vue";
-      import { ref } from "vue";
+      import { ref,computed } from "vue";
       import axios from "axios";
       
       export default {
@@ -75,9 +75,23 @@
 
           fetchDoctors();
 
+          const filteredDoctors = computed(() => {
+      if (!searchQuery.value) {
+        return doctors.value;
+      }
+      return doctors.value.filter(doctor => {
+        return (
+          doctor.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+          doctor.department.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+      });
+    });
+
           return {
             doctors,
             searchQuery,
+            filteredDoctors,
+            error,
 
           }
 
@@ -95,5 +109,43 @@
         box-shadow: 0 0 5px 2px pink;
         border-color: pink;
         outline: none; /* Remove the default outline */
+      }
+      .tooltip-text {
+        visibility: hidden;
+        width: 100px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position above the button */
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 1.8;
+        transition: opacity 0.2s; /* Fade in effect */
+      }
+
+      /* Tooltip arrow */
+      .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%; /* Arrow at the bottom */
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+
+      /* Show tooltip when hovering */
+      .action:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+      .action {
+        position: relative; /* Needed for tooltip positioning */
+
       }
         </style>
