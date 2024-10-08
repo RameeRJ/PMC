@@ -12,7 +12,7 @@
         type="text"
         class="form-control"
         v-model="searchQuery"
-        placeholder="Search Doctor, Schedule or Date"
+        placeholder="Search Doctor or Schedule "
       />
       </div>
           <table class="table table-striped">
@@ -27,9 +27,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="!schedules ">
-                <td colspan="6" class="text-center">No doctors available</td>
-              </tr>
+              <tr v-if="filteredSchedules.length === 0">
+      <td colspan="6" class="text-center">No schedules available</td>
+    </tr>
               <tr v-for="schedule in filteredSchedules" :key="schedule.id">
                 <td>{{ schedule.schedule_title }}</td>
                 <td>{{ schedule.doctor.name }}</td>
@@ -37,8 +37,8 @@
                 <td>{{ formatTime(schedule.start_time) }}</td>
                 <td>{{ formatTime(schedule.end_time)  }}</td>
                 <td>
-                  <button class="action" @click="getSession(doctor.id)">
-                    <span class="tooltip-text">Get Appointment</span>
+                  <button class="action" @click="bookAppointmentModel = true">
+                    <span class="tooltip-text">Book Appointment</span>
                     <i class="fas fa-book-medical"></i>
                   </button>       
                 </td>
@@ -46,6 +46,28 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+    <div v-if="bookAppointmentModel" class="modal-backdrop">
+      <div class="modal-content">
+        <button class="close-icon" @click="bookAppointmentModel = false"><i class="fas fa-times"></i></button>
+        <h3 class="center">Book Your Appointent</h3>
+        <form @submit.prevent="registerDoctor">
+          <div class="form-group">
+            <label for="age">age</label>
+            <input type="text" id="age" v-model="form.age" required />
+          </div>
+          <div class="form-group">
+            <label for="place">place</label>
+            <input type="text" id="place" v-model="form.place" required />
+          </div>
+          
+          
+          <div class="button-group">
+            <button type="submit" class="btn btn-add">Submit</button>
+            <button type="reset" class="btn btn-add-secondary" @click="resetForm">Reset</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -56,6 +78,7 @@ import PatientSidebar from "../../layoutComponents/PatientSidebar.vue";
 import Navbar from "../../layoutComponents/NavBar.vue";
 import { ref, onMounted,computed } from "vue";
 import axios from "axios";
+import { useRoute } from "vue-router";
 
 export default {
   name: "PatientSchedules",
@@ -66,6 +89,16 @@ export default {
   setup() {
     const schedules = ref([]);
     const searchQuery = ref("");
+    const route = useRoute();
+    const bookAppointmentModel = ref(false);
+    
+    const form = ref({
+     age: "",
+     place: "",
+    });
+    
+
+
 
     const fetchSchedules = async () => {
       try {
@@ -99,7 +132,13 @@ export default {
 
     onMounted(() => {
       fetchSchedules();
+
+      if (route.query.search) {
+        searchQuery.value = route.query.search; // Populate search query from URL
+      }
     });
+
+    
 
     const filteredSchedules = computed(() => {
       if (!searchQuery.value) {
@@ -120,6 +159,8 @@ export default {
       filteredSchedules,
       searchQuery,
       formatDate,
+      bookAppointmentModel, 
+      form
     };
   },
 };

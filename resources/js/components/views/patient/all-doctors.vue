@@ -25,15 +25,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="!doctors ">
-                <td colspan="6" class="text-center">No doctors available</td>
-              </tr>
+              <tr v-if="filteredDoctorslength === 0">
+      <td colspan="6" class="text-center">No schedules available</td>
+    </tr>
               <tr v-for="doctor in filteredDoctors" :key="doctor.id">
                 <td>{{ doctor.name }}</td>
                 <td>{{ doctor.phone }}</td>
                 <td>{{ doctor.department }}</td>
                 <td>
-                  <button class="action" @click="getSession(doctor.id)">
+                  <button class="action" @click="getSession(doctor.name)">
                     <span class="tooltip-text">Get Session</span> <!-- Custom tooltip -->
                     <i class="fa-solid fa-file-waveform"></i>
                   </button>       
@@ -51,7 +51,8 @@
       import Navbar from "../../layoutComponents/NavBar.vue";
       import { ref,computed } from "vue";
       import axios from "axios";
-      
+      import { useRouter } from "vue-router";
+      import Swal from "sweetalert2";
       
       
       export default {
@@ -64,6 +65,7 @@
           const doctors = ref([]);
           const searchQuery = ref("");
           const error = ref(null);
+          const router = useRouter();
 
           const fetchDoctors = async ()=> {
             try {
@@ -89,11 +91,32 @@
       });
     });
 
+
+    const getSession = (doctorName) => {
+  // Show confirmation dialog
+  Swal.fire({
+    title: 'Are you sure?',
+    text: `You are about to search for sessions with Dr. ${doctorName}.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, proceed!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Navigate to ongoing schedule if confirmed
+      router.push({ path: '/ongoing-schedules', query: { search: doctorName } });
+    }
+  });
+};
+
           return {
             doctors,
             searchQuery,
             filteredDoctors,
             error,
+            getSession,
 
           }
 
