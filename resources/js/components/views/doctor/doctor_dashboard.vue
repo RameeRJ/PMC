@@ -9,7 +9,11 @@
       
       <!-- Doctor Content (right) -->
       <div class="col-md-9 col-lg-10 p-4">
-        <h1>Doctor Dashboard</h1>
+        <div class="dashboard-header">
+          <h2>Welcome <span class="user-name">{{ user.name }}</span></h2>
+          <p>Thanks for joinnig with us. We are always trying to get you a complete service
+            You can view your dailly schedule, Reach Patients Appointment at home!</p>
+        </div>
         <div class="row">
           <div class="col-md-4">
             <div class="card text-center">
@@ -65,14 +69,24 @@ export default {
       numberOfSchedules: 0,
       numberOfAppointments: 0,
       numberOfDepartments: 0,
+      user: {}
     };  
   },
+  mounted() {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+      }
+
+  },  
+
   setup() {
     const schedules = ref([]); // Store fetched schedules
     const numberOfSchedules = ref(0); // Store number of schedules
     const numberOfAppointments = ref(0);
     const numberOfPatients = ref(0);
-    const error = ref(null); // Handle errors
+    const error = ref(null); // Handle errors3.0
+    
 
     const fetchSchedules = async () => {
       const doctorId = localStorage.getItem('doctor_id'); // Get doctor_id from localStorage
@@ -129,4 +143,35 @@ body {
     line-height: 1.5; /* Adjust line height for better spacing */
   }
 }
+
+.dashboard-header {
+  background-image: url("/public/assets/images/doctor_dashboard.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #000000;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-position: bottom;
+  height: 200px;
+}
+
+.dashboard-header h2 {
+  margin-bottom: 10px;
+  
+}
+
+.dashboard-header p {
+  font-size: 17px;
+  opacity: 1.8;
+  margin-top: 30px;
+  font-weight: 470;
+
+}
+.user-name {
+    color: #df536b; /* Example: tomato red color */
+    font-weight: bold;
+    font-size: 28px;
+    text-transform: uppercase;
+  }
 </style>

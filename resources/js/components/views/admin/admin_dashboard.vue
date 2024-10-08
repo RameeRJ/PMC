@@ -9,7 +9,9 @@
       
       <!-- Admin Content (right) -->
       <div class="col-md-9 col-lg-10 p-4">
-        <h1>Admin Dashboard</h1>
+        <div class="dashboard-header">
+          <h2>Welcome <span class="user-name">{{ user.name }}</span></h2>
+        </div>
         <div class="row">
           <div class="col-md-4">
             <div class="card text-center">
@@ -64,11 +66,16 @@ export default {
       numberOfDoctors: 0, // Array to hold the list of doctors
       numberOfPatients: 0, // Number of patients (initialize as needed)
       numberOfDepartments: 0, // Number of appointments (initialize as needed)
+      user: {}
     };
   },
   mounted() {
     this.fetchStats();
     this.fetchdepartment(); // Fetch statistics when component is mounted
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+      }
   },
   methods: {
     fetchStats() {
@@ -120,4 +127,40 @@ body {
     line-height: 1.5; /* Adjust line height for better spacing */
   }
 }
+
+.dashboard-header {
+  background-image: url("/public/assets/images/admin_dashboard.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #000000;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-position: bottom;
+  height: 200px;
+}
+
+.dashboard-header h2 {
+  margin-bottom: 10px;
+  display: grid;
+    align-content: stretch;
+    justify-content: space-evenly;
+    align-items: stretch;
+    justify-items: center
+  
+}
+
+.dashboard-header p {
+  font-size: 17px;
+  opacity: 1.8;
+  margin-top: 30px;
+  font-weight: 470;
+
+}
+.user-name {
+    color: #df536b; /* Example: tomato red color */
+    font-weight: bold;
+    font-size: 28px;
+    text-transform: uppercase;
+  }
 </style>
