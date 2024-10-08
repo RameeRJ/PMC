@@ -87,6 +87,12 @@ export default {
       // Store user data in localStorage for use across the application
       localStorage.setItem('user', JSON.stringify(user));
 
+      if (user.user_type === 'patient') {
+        localStorage.setItem('patient_name', user.name);
+      }
+
+
+
       // Step 3: Show success message
       Swal.fire({
         icon: 'success',

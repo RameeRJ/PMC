@@ -37,10 +37,10 @@
                 <td>{{ formatTime(schedule.start_time) }}</td>
                 <td>{{ formatTime(schedule.end_time)  }}</td>
                 <td>
-                  <button class="action" @click="bookAppointmentModel = true">
+                  <button class="action" @click="openBookingModal(schedule)">
                     <span class="tooltip-text">Book Appointment</span>
                     <i class="fas fa-book-medical"></i>
-                  </button>       
+                  </button>      
                 </td>
               </tr>
             </tbody>
@@ -52,17 +52,20 @@
       <div class="modal-content">
         <button class="close-icon" @click="bookAppointmentModel = false"><i class="fas fa-times"></i></button>
         <h3 class="center">Book Your Appointent</h3>
-        <form @submit.prevent="registerDoctor">
+        <form @submit.prevent="bookAppointment">
           <div class="form-group">
-            <label for="age">age</label>
-            <input type="text" id="age" v-model="form.age" required />
+            <label for="age">Age</label>
+            <input type="number" id="age" v-model="form.age" required />
           </div>
           <div class="form-group">
-            <label for="place">place</label>
+            <label for="place">Place</label>
             <input type="text" id="place" v-model="form.place" required />
           </div>
-          
-          
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" v-model="form.phone" required />
+          </div>
+
           <div class="button-group">
             <button type="submit" class="btn btn-add">Submit</button>
             <button type="reset" class="btn btn-add-secondary" @click="resetForm">Reset</button>
@@ -78,7 +81,7 @@ import PatientSidebar from "../../layoutComponents/PatientSidebar.vue";
 import Navbar from "../../layoutComponents/NavBar.vue";
 import { ref, onMounted,computed } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute , useRouter } from "vue-router";
 
 export default {
   name: "PatientSchedules",
@@ -91,12 +94,14 @@ export default {
     const searchQuery = ref("");
     const route = useRoute();
     const bookAppointmentModel = ref(false);
-    
+    const selectedSchedule = ref(null);
     const form = ref({
-     age: "",
-     place: "",
+      age: "",
+      place: "",
+      phone:"",
     });
-    
+    const router = useRouter();
+
 
 
 
@@ -130,6 +135,38 @@ export default {
   });
 };
 
+const openBookingModal = (schedule) => {
+      selectedSchedule.value = schedule;
+      bookAppointmentModel.value = true;
+    };
+
+    const resetForm = () => {
+      form.value.age = "";
+      form.value.place = "";
+      form.value.phone = "";
+      bookAppointmentModel.value = false;
+    };
+
+    const bookAppointment = async () => {
+  try {
+    const response = await axios.post("/patient/appointment", {
+      schedule_id: selectedSchedule.value.id, // Selected schedule ID
+      age: form.value.age,
+      place: form.value.place,
+      phone: form.value.phone
+    });
+
+    if (response.status === 201) {
+      // After successful booking, redirect to My Appointments page
+      router.push("/my-booking");
+    }
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+  }
+};
+
+
+
     onMounted(() => {
       fetchSchedules();
 
@@ -159,8 +196,11 @@ export default {
       filteredSchedules,
       searchQuery,
       formatDate,
-      bookAppointmentModel, 
-      form
+      bookAppointmentModel,
+      form,
+      openBookingModal,
+      bookAppointment,
+      resetForm,
     };
   },
 };
