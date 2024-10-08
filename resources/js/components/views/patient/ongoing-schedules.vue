@@ -33,7 +33,7 @@
               <tr v-for="schedule in filteredSchedules" :key="schedule.id">
                 <td>{{ schedule.schedule_title }}</td>
                 <td>{{ schedule.doctor.name }}</td>
-                <td>{{ schedule.schedule_date }}</td>
+                <td>{{ formatDate(schedule.schedule_date)}}</td>
                 <td>{{ formatTime(schedule.start_time) }}</td>
                 <td>{{ formatTime(schedule.end_time)  }}</td>
                 <td>
@@ -88,6 +88,15 @@ export default {
       });
     };
 
+    const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    day: 'numeric',    // Day of the month (e.g., "10")
+    month: 'long',     // Full month name (e.g., "October")
+    year: 'numeric'    // Full year (e.g., "2024")
+  });
+};
+
     onMounted(() => {
       fetchSchedules();
     });
@@ -99,8 +108,8 @@ export default {
       return schedules.value.filter(schedule => {
         return (
           schedule.doctor.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          schedule.schedule_title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          schedule.schedule_date.toLowerCase().includes(searchQuery.value.toLowerCase())
+          schedule.schedule_title.toLowerCase().includes(searchQuery.value.toLowerCase())
+         
         );
       });
     });
@@ -110,6 +119,7 @@ export default {
       formatTime,
       filteredSchedules,
       searchQuery,
+      formatDate,
     };
   },
 };
