@@ -28,7 +28,7 @@ class ScheduleRequest extends FormRequest
             'schedule_date' => 'required|date|after_or_equal:today',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'max_bookings' => 'required|integer|between:20,60',
+            'max_bookings' => 'required|integer|between:3,60',
         ];
     }
 

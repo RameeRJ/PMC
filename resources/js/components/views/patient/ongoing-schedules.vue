@@ -82,6 +82,7 @@ import Navbar from "../../layoutComponents/NavBar.vue";
 import { ref, onMounted,computed } from "vue";
 import axios from "axios";
 import { useRoute , useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 export default {
   name: "PatientSchedules",
@@ -155,18 +156,28 @@ const openBookingModal = (schedule) => {
       place: form.value.place,
       phone: form.value.phone
     });
+    Swal.fire({
+      icon: 'success',
+      title: 'Appointment booked successfully!',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+    });
 
     if (response.status === 201) {
-      // After successful booking, redirect to My Appointments page
+    
       router.push("/my-booking");
     }
   } catch (error) {
     console.error("Error booking appointment:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Booking failed',
+      text: error.response?.data?.error || 'An error occurred while booking. Please try again.',
+    });
   }
 };
-
-
-
     onMounted(() => {
       fetchSchedules();
 

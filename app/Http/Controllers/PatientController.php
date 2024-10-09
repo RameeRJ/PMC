@@ -26,6 +26,16 @@ class PatientController extends Controller
 
     // Retrieve the authenticated user
     $user = Auth::user(); 
+    // Get the schedule
+    $schedule = Schedule::findOrFail($request->schedule_id);
+
+    // Count the number of existing appointments for this schedule
+    $appointmentCount = Appointment::where('schedule_id', $request->schedule_id)->count();
+
+    // Check if the number of appointments exceeds or matches the maximum bookings allowed
+    if ($appointmentCount >= $schedule->max_bookings) {
+        return response()->json(['error' => 'No slots remaining. Maximum bookings reached.'], 400);
+    }
 
     // Find the maximum token for the given schedule and increment it by 1
     $lastToken = Appointment::where('schedule_id', $request->schedule_id)
@@ -45,4 +55,19 @@ class PatientController extends Controller
 
     return response()->json(['message' => 'Appointment created successfully'], 201);
 }
+
+public function getAppointmentsByUser()
+{
+    // Retrieve the authenticated user
+    $user = Auth::user();
+
+    // Fetch appointments for the user
+    $appointments = Appointment::with(['schedule', 'schedule.doctor'])
+                               ->where('user_id', $user->id)
+                               ->get();
+
+    // Return appointments with schedule details
+    return response()->json($appointments, 200);
+}
+
 }
