@@ -29,6 +29,8 @@ Route::post('/schedules/{doctorId}', [DoctorController::class, 'getSchedules']);
 Route::post('/schedules', [DoctorController::class, 'Schedulestore']);
 Route::post('/get-doctor-id', [DoctorController::class, 'getDoctorIdByEmail']);
 Route::delete('/schedules/{id}', [DoctorController::class, 'removeSchedule']);
+Route::post('/appointments', [DoctorController::class, 'getAppointment']);
+
 
 
 

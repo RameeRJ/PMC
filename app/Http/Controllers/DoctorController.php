@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Schedule;
 use App\Models\Doctor;
+use App\Models\Appointment;
 use App\Http\Requests\ScheduleRequest;
 
 use Illuminate\Http\Request;
@@ -71,6 +72,14 @@ class DoctorController extends Controller
     } catch (\Exception $e) {
         return response()->json(['message' => 'Schedule not found or could not be deleted.'], 404);
     }
+}
+
+public function getAppointment(Request $request)
+{
+    // Fetch all appointments with the related schedule and user data
+    $appointments = Appointment::with(['schedule', 'user'])->get();
+
+    return response()->json($appointments);
 }
 
 
