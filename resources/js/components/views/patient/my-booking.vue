@@ -33,7 +33,7 @@
                 <td>{{ (appointment.token) }}</td>
                 <td>
                   <button class="action" @click="removeAppointment(appointment.id)">
-                    <i class="fas fa-trash-alt"></i>
+                    <i class="fa-solid fa-ban"></i>
                   </button>
                 </td>
               </tr>
@@ -73,6 +73,42 @@ export default {
         error.value = 'Failed to load doctors. Please try again.';
       }
     };
+
+    const removeAppointment = async (id) => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.delete(`/appointments/${id}`);
+            fetchAppointments();
+            appointments.value = appointments.value.filter(appointment => appointment.id !== id);
+             Swal.fire({
+      icon: 'success',
+      title: 'Appointment removed successfully',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  } catch (error) {
+    console.error("Error removing schedule:", error);
+    Swal.fire('Error', 'Failed to remove schedule. Please try again.', 'error');
+  }
+}
+      });
+    };
+ 
+
+
+
     const formatTime = (time) => {
       const [hours, minutes] = time.split(':');
       const date = new Date();
@@ -100,10 +136,11 @@ export default {
     appointments,
     fetchAppointments,
     formatDate,
-    formatTime
-  }
+    formatTime, 
+    removeAppointment
+  };
 },
-}
+    };
 </script>
 <style scoped>
 @import "/public/assets/css/view.css";

@@ -70,4 +70,17 @@ public function getAppointmentsByUser()
     return response()->json($appointments, 200);
 }
 
+public function removeAppointment($id)
+{
+    try {
+        $appointment = Appointment::findOrFail($id); // Find the appointment by ID
+
+        $appointment->delete(); // Delete the appointment
+
+        return response()->json(['message' => 'appointment removed successfully.'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'appointment not found or could not be deleted.'], 404);
+    }
+}
+
 }

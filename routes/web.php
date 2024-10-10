@@ -37,3 +37,4 @@ Route::post('/appointments', [DoctorController::class, 'getAppointment']);
 Route::post('/patient/schedules', [PatientController::class, 'getSchedules']);
 Route::post('/patient/appointment', [PatientController::class, 'appStore']);
 Route::post('/appointments/{userId}', [PatientController::class, 'getAppointmentsByUser']);
+Route::delete('/appointments/{id}', [PatientController::class, 'removeappointment']);

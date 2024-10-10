@@ -35,7 +35,7 @@
                 <td>
                   <button class="action" @click="getSession(doctor.name)">
                     <span class="tooltip-text">Get Session</span> <!-- Custom tooltip -->
-                    <i class="fa-solid fa-file-waveform"></i>
+                    <i class="fa-solid fa-share-from-square"></i>
                   </button>       
                 </td>
               </tr>
