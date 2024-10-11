@@ -15,67 +15,34 @@
 
         <!-- Status Cards Section -->
         <div class="status-section mb-4">
-          <h3>Status Overview</h3>
+          <h3 class="center">Status Overview</h3>
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="status-card">
-                <img src="https://via.placeholder.com/100" alt="Doctor Icon" />
-                <p class="card-count">5</p>
+                <router-link to="/all-doctors" class="no-underline">
+                <p class="card-count">{{ numberOfDoctors }}</p>
                 <span class="card-label">Doctors Available</span>
+                </router-link>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="status-card">
-                <img src="https://via.placeholder.com/100" alt="Patient Icon" />
-                <p class="card-count">20</p>
-                <span class="card-label">Patients Registered</span>
+                <router-link to="/ongoing-schedules" class="no-underline">
+                <p class="card-count">{{numberOfSchedules}}</p>
+                <span class="card-label">Schedules Available</span>
+              </router-link>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="status-card">
-                <img src="https://via.placeholder.com/100" alt="Booking Icon" />
-                <p class="card-count">3</p>
-                <span class="card-label">New Bookings</span>
+                <router-link to="/my-booking" class="no-underline">
+                <p class="card-count">{{ numberOfAppointments }}</p>
+                <span class="card-label">Appointments</span>
+              </router-link>
               </div>
             </div>
-            <div class="col-md-3">
-              <div class="status-card">
-                <img src="https://via.placeholder.com/100" alt="Session Icon" />
-                <p class="card-count">2</p>
-                <span class="card-label">Today’s Sessions</span>
-              </div>
-            </div>
+            
           </div>
-        </div>
-
-        <!-- Upcoming Bookings Section -->
-        <div class="upcoming-bookings-section">
-          <h3>Your Upcoming Bookings</h3>
-          <table class="table booking-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Session Title</th>
-                <th>Doctor</th>
-                <th>Scheduled Date & Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>General Check-up</td>
-                <td>Dr. John Doe</td>
-                <td>2024-10-15 10:00 AM</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Cardiology Consultation</td>
-                <td>Dr. Sarah Lee</td>
-                <td>2024-10-20 12:00 PM</td>
-              </tr>
-              <!-- Add more bookings as needed -->
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
@@ -85,6 +52,9 @@
 <script>
 import NavBar from '../../layoutComponents/NavBar.vue';
 import PatientSidebar from '../../layoutComponents/PatientSidebar.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
 
 export default {
   name: "PatientDashboard",
@@ -94,6 +64,9 @@ export default {
   },
   data() {
     return {
+      numberOfSchedules: 0,
+      numberOfAppointments: 0,
+      numberOfDoctors: 0,
       user: {}
   };
 },
@@ -104,6 +77,82 @@ export default {
       }
 
   },  
+  setup() {
+    const schedules = ref([]); 
+    const appointments = ref([]); 
+    const doctors = ref([]);
+    const numberOfSchedules = ref(0);
+    const numberOfAppointments = ref(0);
+    const filteredAppointmentsByDoctor = ref([]);
+    const numberOfDoctors = ref(0);
+    const error = ref(null); // Handle errors3.0
+    
+
+    const fetchSchedules = async () => { // Get doctor_id from localStorage
+      try {
+        const response = await axios.post(`/patient/schedules`);
+        console.log("Schedules fetched:", response.data);
+        schedules.value = response.data.schedules;
+
+        // Get the length of the schedules
+        numberOfSchedules.value = response.data.schedules.length;
+
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+        error.value = 'Failed to load schedules. Please try again.';
+      }
+    };
+
+    const fetchAppointments = async () => {
+      const userId = localStorage.getItem('user_id'); // Get doctor_id from localStorage
+  try {
+    const response = await axios.post(`/appointments/${userId}`);
+        console.log("appointments fetched:", response.data);
+        appointments.value = response.data;
+
+        numberOfAppointments.value = response.data.length;
+    
+    // Filter appointments based on the doctor's ID
+    filteredAppointmentsByDoctor.value = appointments.value.filter(appointment =>
+      appointment.schedule.doctor_id === Number(doctorId) // Ensure comparison with number
+    );
+
+    // Assign the length of filtered appointments to numberOfAppointments
+    numberOfAppointments.value = filteredAppointmentsByDoctor.value.length;
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+  }
+};
+const fetchDoctors = async () => {
+  try {
+    const response = await axios.post(`/doctors`); 
+    doctors.value = response.data; 
+
+    numberOfDoctors.value = response.data.length;
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+  }
+};
+
+
+    // Fetch schedules when the component is mounted
+    onMounted(() => {
+      fetchSchedules();
+      fetchAppointments();
+      fetchDoctors();
+    });
+
+    return {
+      schedules,
+      numberOfSchedules,
+      error,
+      fetchAppointments,
+      numberOfAppointments,
+      numberOfDoctors,
+      fetchDoctors
+      };
+  }
+  
 }
 </script>
 
@@ -222,5 +271,11 @@ export default {
     font-size: 28px;
     text-transform: uppercase;
   }
-
+.center{
+  text-align: center;
+}
+.no-underline {
+  text-decoration: none;
+  color: rgb(0, 0, 0); /* Remove underline from links */
+}
 </style>

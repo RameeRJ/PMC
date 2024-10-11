@@ -40,7 +40,7 @@
               <div class="card-body">
                 <router-link to="/my-patients" class="no-underline">
                   <h5 class="card-title">Number of Patients</h5>
-                  <p class="card-text">{{ numberOfPatiens }}</p>
+                  <p class="card-text">{{ numberOfPatients }}</p>
                 </router-link>
               </div>
             </div>
@@ -86,7 +86,7 @@ export default {
     const numberOfSchedules = ref(0); // Store number of schedules
     const numberOfAppointments = ref(0);
     const filteredAppointmentsByDoctor = ref([]);
-    const numberOfPatiens = ref(0);
+    const numberOfPatients = ref(0);
     const error = ref(null); // Handle errors3.0
     
 
@@ -155,7 +155,7 @@ const fetchPatient = async () => {
       error,
       fetchAppointments,
       numberOfAppointments,
-      numberOfPatiens,
+      numberOfPatients,
     fetchPatient
       };
   }
