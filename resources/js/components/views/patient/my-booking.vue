@@ -32,8 +32,13 @@
                 <td>{{ formatTime(appointment.schedule.start_time) }}</td>
                 <td>{{ (appointment.token) }}</td>
                 <td>
-                  <button class="action" @click="removeAppointment(appointment.id)">
+                  <button v-if ="!appointment.prescription" class="action" @click="removeAppointment(appointment.id)">
+                    <span class="tooltip-text">Cancel Booking</span>
                     <i class="fa-solid fa-ban"></i>
+                  </button>
+                  <button  v-else class="action" @click="confirmDownload(appointment.prescription, appointment.schedule.schedule_title, appointment.schedule.schedule_date)">
+                    <span class="tooltip-text">Download Prescription</span>
+                    <i class="fa-solid fa-download"></i>
                   </button>
                 </td>
               </tr>
@@ -105,6 +110,43 @@ export default {
 }
       });
     };
+    const confirmDownload = (prescriptionPath, scheduleName, appointmentDate) => {
+  Swal.fire({
+    title: 'Do you want to download the file?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Download',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      downloadPrescription(prescriptionPath, scheduleName, appointmentDate);
+    }
+  });
+};
+
+const downloadPrescription = (prescriptionPath, scheduleName, appointmentDate) => {
+  // Extract the file extension (e.g., 'pdf', 'jpg', 'png')
+  const fileExtension = prescriptionPath.split('.').pop().toLowerCase();
+
+  // Replace spaces in the schedule name with underscores
+  const sanitizedScheduleName = scheduleName.replace(/\s+/g, '_');
+
+  // Format the appointment date (e.g., '2024-10-11')
+  const formattedDate = new Date(appointmentDate).toISOString().split('T')[0];
+
+  // Create the file name dynamically with the schedule name and date
+  const fileName = `${sanitizedScheduleName}_${formattedDate}_prescription.${fileExtension}`;
+
+  // Trigger the file download
+  const link = document.createElement('a');
+  link.href = `/storage/${prescriptionPath}`; // Ensure the path is correct for your setup
+  link.download = fileName; // Use the dynamic file name with the correct extension
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
  
 
 
@@ -137,12 +179,49 @@ export default {
     fetchAppointments,
     formatDate,
     formatTime, 
-    removeAppointment
+    removeAppointment,
+    confirmDownload,
   };
 },
     };
 </script>
 <style scoped>
 @import "/public/assets/css/view.css";
+.tooltip-text {
+  visibility: hidden;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1.8;
+  transition: opacity 0.2s;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.action:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.action {
+  position: relative;
+}
 </style>
   

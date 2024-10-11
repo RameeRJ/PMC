@@ -1,96 +1,178 @@
 <template>
   <Navbar />
+
+  <!-- Doctor appointments table -->
   <div class="container-fluid">
-      <div class="row">
-          <div class="col-md-3 col-lg-2 bg-light vh-100 p-0">
-              <DoctorSidebar />
-          </div>
-          <div class="col-md-9 col-lg-10 p-4">
-              <div class="doctor-list-section">
-                  <div class="doctor-list-header d-flex justify-content-between align-items-center margin">
-                      
-                      <input
-        type="text"
-        class="form-control"
-        v-model="searchQuery"
-        placeholder="Search Patient or Schedule"
-      />
-                  </div>
-                  <table class="table table-striped">
-                      <thead>
-                          <tr>
-                              <th>Patient Name</th>
-                              <th>Age</th>
-                              <th>Place</th>
-                              <th>Phone</th>
-                              <th>Schedule</th>
-                              <th>Token</th>
-                              <th>Action</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr v-if="filteredAppointments.length === 0">
-                              <td colspan="6" class="text-center">No appointments available</td>
-                          </tr>
-                          <tr v-for="appointment in filteredAppointments" :key="appointment.id">
-                              <td>{{ appointment.name }}</td>
-                              <td>{{ appointment.age }}</td>
-                              <td>{{ appointment.place }}</td>
-                              <td>{{ appointment.phone }}</td>
-                              <td>{{ appointment.schedule.schedule_title }}</td>
-                              <td>{{ appointment.token }}</td>
-
-
-                             
-                              <td>
-                                <button class="action" @click="getPatient(appointment.name)">
-                    <span class="tooltip-text">Send Priscription</span> <!-- Custom tooltip -->
-                    <i class="fa-solid fa-share-from-square"></i>
-                  </button>       
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
+    <div class="row">
+      <div class="col-md-3 col-lg-2 bg-light vh-100 p-0">
+        <DoctorSidebar />
       </div>
+      <div class="col-md-9 col-lg-10 p-4">
+        <div class="doctor-list-section">
+          <div class="doctor-list-header d-flex justify-content-between align-items-center margin">
+            <input type="text" class="form-control" v-model="searchQuery" placeholder="Search Patient or Schedule" />
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Patient Name</th>
+                <th>Age</th>
+                <th>Place</th>
+                <th>Phone</th>
+                <th>Schedule</th>
+                <th>Token</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="filteredAppointments.length === 0">
+                <td colspan="7" class="text-center">No appointments available</td>
+              </tr>
+              <tr v-for="appointment in filteredAppointments" :key="appointment.id">
+                <td>{{ appointment.name }}</td>
+                <td>{{ appointment.age }}</td>
+                <td>{{ appointment.place }}</td>
+                <td>{{ appointment.phone }}</td>
+                <td>{{ appointment.schedule.schedule_title }}</td>
+                <td>{{ appointment.token }}</td>
+                <td>
+                  <!-- Check if the prescription is already sent -->
+                  <button v-if="!appointment.prescriptionSent" class="action" @click="openPrescriptionModal(appointment)">
+                    <span class="tooltip-text">Send Prescription</span>
+                    <i class="fa-solid fa-file"></i>
+                  </button>
+                  <!-- Show tick if prescription is sent -->
+                  <button class="action1" v-else >
+                    <span class="tooltip-text">Prescription send successfully</span>
+                    <i class="fa fa-check-circle text-success"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div v-if="isModalOpen" class="modal-backdrop">
+  <div class="modal-content">
+    <button class="close-icon" @click="isModalOpen = false">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 class="center">Send Prescription</h3>
+    <form @submit.prevent="submitPrescription">
+      <div class="form-group">
+        <label for="prescriptionFile">Upload Prescription File:</label>
+        <input
+          type="file"
+          id="prescriptionFile"
+          @change="handleFileUpload"
+          class="form-control"
+          accept=".pdf, .jpg, .png" 
+        />
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn btn-add">Submit</button>
+        <button type="reset" class="btn btn-add-secondary" @click="resetForm">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
+    </div>
   </div>
 </template>
 
 <script>
 import DoctorSidebar from "../../layoutComponents/DoctorSidebar.vue";
 import Navbar from "../../layoutComponents/NavBar.vue";
-import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
-import { useRoute , useRouter } from "vue-router";
+import axios from "axios";
+import { ref, computed, onMounted } from "vue";
 import Swal from "sweetalert2";
+import { useRoute } from "vue-router";
 
 export default {
   name: "MyAppointment",
   components: {
     DoctorSidebar,
-    Navbar,
+    Navbar
   },
   setup() {
-    const appointments = ref([]); // All fetched appointments
-    const filteredAppointmentsByDoctor = ref([]); // Appointments filtered by doctor ID
-    const searchQuery = ref(""); // Search query
+    const appointments = ref([]);
+    const filteredAppointmentsByDoctor = ref([]);
+    const searchQuery = ref("");
+    const prescriptionText = ref("");
+    const prescriptionFile = ref(null);
+    const selectedAppointmentId = ref(null);
+    const isModalOpen = ref(false); // Modal visibility flag
     const route = useRoute();
-    const router = useRouter();
 
     const fetchAppointments = async () => {
-      const doctorId = localStorage.getItem('doctor_id'); // Get doctor_id from localStorage
+      const doctorId = localStorage.getItem("doctor_id");
       try {
-        const response = await axios.post(`/appointments`); // Fetch all appointments
-        appointments.value = response.data; // Assign the fetched appointments
-        // Filter appointments based on the doctor's ID
-        filteredAppointmentsByDoctor.value = appointments.value.filter(appointment =>
-          appointment.schedule.doctor_id === Number(doctorId) // Ensure comparison with number
+        const response = await axios.post(`/appointments`);
+        appointments.value = response.data.map((appointment) => ({
+          ...appointment,
+          prescriptionSent: !!appointment.prescription, // Track if prescription is already sent
+        }));
+        filteredAppointmentsByDoctor.value = appointments.value.filter(
+          (appointment) => appointment.schedule.doctor_id === Number(doctorId)
         );
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
     };
+
+    const openPrescriptionModal = (appointment) => {
+      selectedAppointmentId.value = appointment.id;
+      prescriptionText.value = "";
+      prescriptionFile.value = null;
+      isModalOpen.value = true;
+    };
+
+    const closeModal = () => {
+      isModalOpen.value = false; // Close modal
+    };
+
+    const handleFileUpload = (event) => {
+      prescriptionFile.value = event.target.files[0];
+    };
+
+    const submitPrescription = async () => {
+      if (!prescriptionFile.value) {
+    Swal.fire("Error", "File is required.", "error");
+    return; // Exit the function if no file is uploaded
+  }
+
+      const formData = new FormData();
+      if (prescriptionFile.value) {
+        formData.append("prescription", prescriptionFile.value);
+      }
+      try {
+        // Send the prescription via API
+        await axios.post(`/appointments/${selectedAppointmentId.value}/prescription`, formData);
+        Swal.fire("Success", "Prescription sent successfully", "success");
+        closeModal();
+        // Update the appointment's prescriptionSent status after sending
+        const appointmentIndex = appointments.value.findIndex(
+          (appointment) => appointment.id === selectedAppointmentId.value
+        );
+        if (appointmentIndex !== -1) {
+          appointments.value[appointmentIndex].prescriptionSent = true;
+        }
+      } catch (error) {
+    // Check if the error is due to validation
+    if (error.response && error.response.status === 422) {
+      const errors = error.response.data.errors;
+      // Extract error messages
+      const errorMessages = Object.values(errors).flat().join(', '); // Join multiple errors into a single string
+      Swal.fire("Error", errorMessages || "Failed to send prescription", "error");
+    } else {
+      Swal.fire("Error", "Failed to send prescription", "error");
+    }
+  }
+};
+
+    onMounted(() => {
+      fetchAppointments();
+    });
 
     onMounted(() => {
       fetchAppointments();
@@ -125,51 +207,107 @@ export default {
 
     return {
       filteredAppointments,
-      searchQuery, // Return searchQuery to bind with input
+      searchQuery,
+      openPrescriptionModal,
+      closeModal,
+      handleFileUpload,
+      submitPrescription,
+      isModalOpen,
+      prescriptionText,
     };
   },
 };
 </script>
 
-
 <style scoped>
 @import "/public/assets/css/view.css";
+/* Custom modal styling */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.custom-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  position: relative;
+}
+
+.custom-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.custom-modal-body {
+  margin-bottom: 20px;
+}
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 .tooltip-text {
-        visibility: hidden;
-        width: 100px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%; /* Position above the button */
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 1.8;
-        transition: opacity 0.2s; /* Fade in effect */
-      }
+  visibility: hidden;
+  width: 100px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1.8;
+  transition: opacity 0.2s;
+}
 
-      /* Tooltip arrow */
-      .tooltip-text::after {
-        content: "";
-        position: absolute;
-        top: 100%; /* Arrow at the bottom */
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: black transparent transparent transparent;
-      }
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
 
-      /* Show tooltip when hovering */
-      .action:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
-      }
-      .action {
-        position: relative; /* Needed for tooltip positioning */
+.action:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
 
-      }
+.action {
+  position: relative;
+}
+.action1:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+.action1 {
+  position: relative;
+}
+
 </style>

@@ -34,7 +34,7 @@
                 <td>{{ doctor.department }}</td>
                 <td>
                   <button class="action" @click="getSession(doctor.name)">
-                    <span class="tooltip-text">Get Session</span> <!-- Custom tooltip -->
+                    <span class="tooltip-text">Get Schedule</span> <!-- Custom tooltip -->
                     <i class="fa-solid fa-share-from-square"></i>
                   </button>       
                 </td>

@@ -30,7 +30,7 @@
               <div class="card-body">
                 <router-link to="/my-appointments" class="no-underline">
                   <h5 class="card-title">Number of Appointments</h5>
-                  <p class="card-text">{{ numberOfAppointments }}</p>
+                  <p class="card-text">{{ numberOfAppointments  }}</p>
                 </router-link>
               </div>
             </div>
@@ -40,7 +40,7 @@
               <div class="card-body">
                 <router-link to="/my-patients" class="no-underline">
                   <h5 class="card-title">Number of Patients</h5>
-                  <p class="card-text">{{ numberOfDepartments }}</p>
+                  <p class="card-text">{{ numberOfPatiens }}</p>
                 </router-link>
               </div>
             </div>
@@ -68,7 +68,7 @@ export default {
     return {
       numberOfSchedules: 0,
       numberOfAppointments: 0,
-      numberOfDepartments: 0,
+      numberOfPatiens: 0,
       user: {}
     };  
   },
@@ -82,9 +82,11 @@ export default {
 
   setup() {
     const schedules = ref([]); // Store fetched schedules
+    const appointments = ref([]); // Store fetched appointments
     const numberOfSchedules = ref(0); // Store number of schedules
     const numberOfAppointments = ref(0);
-    const numberOfPatients = ref(0);
+    const filteredAppointmentsByDoctor = ref([]);
+    const numberOfPatiens = ref(0);
     const error = ref(null); // Handle errors3.0
     
 
@@ -104,16 +106,58 @@ export default {
       }
     };
 
+    const fetchAppointments = async () => {
+  const doctorId = localStorage.getItem('doctor_id'); // Get doctor_id from localStorage
+  try {
+    const response = await axios.post(`/appointments`); // Fetch all appointments
+    appointments.value = response.data; // Assign the fetched appointments
+    
+    // Filter appointments based on the doctor's ID
+    filteredAppointmentsByDoctor.value = appointments.value.filter(appointment =>
+      appointment.schedule.doctor_id === Number(doctorId) // Ensure comparison with number
+    );
+
+    // Assign the length of filtered appointments to numberOfAppointments
+    numberOfAppointments.value = filteredAppointmentsByDoctor.value.length;
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+  }
+};
+const fetchPatient = async () => {
+  const doctorId = localStorage.getItem('doctor_id'); // Get doctor_id from localStorage
+  try {
+    const response = await axios.post(`/appointments`); // Fetch all appointments
+    appointments.value = response.data; // Assign the fetched appointments
+    
+    // Filter appointments based on the doctor's ID
+    filteredAppointmentsByDoctor.value = appointments.value.filter(appointment =>
+      appointment.schedule.doctor_id === Number(doctorId) // Ensure comparison with number
+    );
+
+    // Assign the length of filtered appointments to numberOfAppointments
+    numberOfPatiens.value = filteredAppointmentsByDoctor.value.length;
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+  }
+};
+
+
     // Fetch schedules when the component is mounted
     onMounted(() => {
       fetchSchedules();
+      fetchAppointments();
+      fetchPatient();
     });
 
     return {
       schedules,
       numberOfSchedules,
       error,
-    };
+      fetchAppointments,
+      numberOfAppointments,
+      numberOfPatiens,
+    fetchPatient
+      };
   }
 };
 </script>

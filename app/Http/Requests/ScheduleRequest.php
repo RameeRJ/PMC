@@ -24,7 +24,7 @@ class ScheduleRequest extends FormRequest
     {
         return [
             'doctor_id' => 'required|exists:doctors,id',
-            'schedule_title' => 'required|string|max:255',
+            'schedule_title' => 'required|string|max:255|regex:/^\S*$/',
             'schedule_date' => 'required|date|after_or_equal:today',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -40,6 +40,7 @@ class ScheduleRequest extends FormRequest
         return [
             'doctor_id.required' => 'Doctor is required.',
             'doctor_id.exists' => 'The selected doctor does not exist.',
+            'schedule_title.regex' => 'The schedule title must not contain spaces',
             'schedule_title.required' => 'Schedule title is required.',
             'schedule_date.required' => 'Schedule date is required.',
             'schedule_date.after_or_equal' => 'Schedule date cannot be before today.', // Custom error message

@@ -179,3 +179,20 @@ input:focus {
     padding: 8px 16px;
   
   }
+
+  .action1 {
+    background-color: #f5f5f5;
+    color: #c86373;
+    border-color: #ffffff;
+    border-radius: 4px;
+    border-width: thin;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+  }
+  .action1:hover{
+    background-color: #09ff00;
+    color: #ffffff;
+  }
