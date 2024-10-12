@@ -24,8 +24,8 @@ import Swal from 'sweetalert2';
 export default {
   methods: {
     async logout() {
-      try {
-        const result = await Swal.fire({
+  try {
+    const result = await Swal.fire({
       title: 'Are you sure?',
       text: 'You will be logged out!',
       icon: 'warning',
@@ -41,9 +41,15 @@ export default {
     if (result.isConfirmed) {
       // Proceed with logout
       await axios.post('/logout');
-      
-      // Clear local storage or session data if required
-      localStorage.removeItem('authToken');
+
+      // Clear all relevant local storage data
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('user');
+      localStorage.removeItem('doctor_id');
+      localStorage.removeItem('authToken'); // If you have a token stored
+      localStorage.removeItem('patient_name');
+      localStorage.removeItem('profileImage');
 
       // Redirect the user to the login page
       this.$router.push({ name: 'index' });
@@ -58,16 +64,18 @@ export default {
         timer: 2000,
         padding: '1em',
       });
-    } 
-  }catch (error) {
-    console.error('Error logging out:', error);
+    }
+  } catch (error) {
+    // Handle any potential errors during the logout process
     Swal.fire({
       icon: 'error',
-      title: 'Error logging out',
-      text: 'Please try again later.',
+      title: 'Logout Failed',
+      text: 'There was an error logging you out. Please try again.',
+      padding: '1em',
     });
   }
-}}}
+}
+}}
 </script>
 
 <style scoped>

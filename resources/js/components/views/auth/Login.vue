@@ -58,75 +58,74 @@ export default {
     };
   },
   methods: {
-  async login() {
-    this.errors = {};
+    async login() {
+      this.errors = {};
 
-    try {
-      // Step 1: Check if the user is a doctor and get doctor ID
-      let doctorId = null;
       try {
-        const doctorResponse = await axios.post('/get-doctor-id', { email: this.email });
-        doctorId = doctorResponse.data.doctor_id;
-        localStorage.setItem('doctor_id', doctorId); // Store doctor_id if found
-      } catch (err) {
-        // If the doctor isn't found, it's okay to proceed
-        if (err.response.status !== 404) {
-          throw err;
+        // Step 1: Check if the user is a doctor and get doctor ID
+        let doctorId = null;
+        try {
+          const doctorResponse = await axios.post('/get-doctor-id', { email: this.email });
+          doctorId = doctorResponse.data.doctor_id;
+          localStorage.setItem('doctor_id', doctorId); // Store doctor_id if found
+        } catch (err) {
+          // If the doctor isn't found, it's okay to proceed
+          if (err.response.status !== 404) {
+            throw err;
+          }
+        }
+
+        // Step 2: Proceed with the login
+        const response = await axios.post('/login', {
+          email: this.email,
+          password: this.password,
+          remember: this.remember,
+        });
+
+        const user = response.data.user;
+
+        // Step 3: Store authentication data in localStorage
+        localStorage.setItem('isAuthenticated', true); // Mark the user as authenticated
+        localStorage.setItem('userType', user.user_type); // Store user type (admin, doctor, patient)
+        localStorage.setItem('user', JSON.stringify(user)); // Store the user data
+        localStorage.setItem('patient_name', user.name);
+
+    
+
+        // Step 4: Show success message
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful!',
+          showConfirmButton: false,
+          timer: 1000,
+          toast: true,
+          position: 'top-end',
+        });
+
+        // Step 5: Redirect based on user type
+        const userType = user.user_type;
+        if (userType === 'admin') {
+          this.$router.push('/admin');
+        } else if (userType === 'patient') {
+          this.$router.push('/patient');
+        } else if (userType === 'doctor') {
+          this.$router.push('/doctor');
+        }
+      } catch (error) {
+        if (error.response && error.response.data.errors) {
+          // Handle validation errors
+          this.errors = error.response.data.errors;
+        } else {
+          alert('Login failed. Please try again.');
         }
       }
-
-      // Step 2: Proceed with the login
-      const response = await axios.post('/login', {
-        email: this.email,
-        password: this.password,
-        remember: this.remember,
-      });
-
-      const user = response.data.user;
-
-      // Store user data in localStorage for use across the application
-      localStorage.setItem('user', JSON.stringify(user));
-
-      if (user.user_type === 'patient') {
-        localStorage.setItem('patient_name', user.name);
-      }
-
-
-
-      // Step 3: Show success message
-      Swal.fire({
-        icon: 'success',
-        title: 'Login Successful!',
-        showConfirmButton: false,
-        timer: 1000,
-        toast: true,
-        position: 'top-end',
-      });
-
-      // Step 4: Redirect based on user type
-      const userType = user.user_type;
-      if (userType === 'admin') {
-        this.$router.push('/admin');
-      } else if (userType === 'patient') {
-        this.$router.push('/patient');
-      } else if (userType === 'doctor') {
-        this.$router.push('/doctor');
-      }
-    } catch (error) {
-      if (error.response && error.response.data.errors) {
-        // Handle validation errors
-        this.errors = error.response.data.errors;
-      } else {
-        alert('Login failed. Please try again.');
-      }
-    }
+    },
   },
-},
 
   mounted() {
     // Clear any existing user data on load
     localStorage.removeItem('user');
-    localStorage.removeItem('doctor_id')
+    localStorage.removeItem('doctor_id');
   },
 };
 </script>
