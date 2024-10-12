@@ -22,9 +22,9 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <tr v-if="appointments.length === 0">
+              <tr v-if="appointments.length === 0">
                 <td colspan="6" class="text-center">No appointments available</td>
-              </tr> -->
+              </tr>
               <tr v-for="appointment in appointments" :key="appointment.id">
                 <td>{{ appointment.schedule.schedule_title }}</td>
                 <td>{{ appointment.schedule.doctor.name }}</td>

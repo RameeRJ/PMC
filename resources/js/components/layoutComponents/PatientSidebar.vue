@@ -30,6 +30,16 @@
             </div>
           </td>
         </tr>
+        <tr class="menu-row">
+                  <td class="menu-btn menu-icon-dashbord" :class="{ 'menu-active': isActive('/patient') }">
+                      <router-link to="/patient" class="non-style-link-menu">
+                          <div class="menu-item">
+                              <i class="fas fa-tachometer-alt"></i>
+                              <p class="menu-text">Dashboard</p>
+                          </div>
+                      </router-link>
+                  </td>
+              </tr>
               <tr class="menu-spacer"><td></td></tr>
               <tr class="menu-row">
                   <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/all-doctors') }">
