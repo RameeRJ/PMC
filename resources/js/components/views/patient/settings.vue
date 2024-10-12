@@ -7,8 +7,12 @@
       </div>
       <div class="col-md-9 col-lg-10 p-4">
         <h2 class="mb-4">Account Settings</h2>
+        <div class="settings-option" @click="openProfileModal">
+          <h5 class="text">View your profile</h5>
+          <p>View your Account Details</p>
+        </div>
         <div class="settings-option" @click="openEditProfileModal">
-          <h5 class="text">Account Settings</h5>
+          <h5 class="text">Edit your profile</h5>
           <p>Edit your Account Details & Upload Profile picture</p>
         </div>
         <div class="settings-option delete-option">
@@ -77,6 +81,39 @@
           </form>
         </div>
       </div>
+      <div v-if="ViewProfileModel" class="modal-backdrop">
+  <div class="modal-content">
+    <button class="close-icon" @click="ViewProfileModel = false">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 class="center">Profile</h3>
+    <div class="profile-pic-container">
+      <img
+        :src="previewImage || '/storage/assets/images/default.jpg'"
+        alt="Profile Preview"
+        class="profile-preview"
+      />
+    </div>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <p class="form-control-static">{{ formData.name }}</p>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <p class="form-control-static">{{ formData.email }}</p>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+      <p class="form-control-static">{{ formData.phone }}</p>
+    </div>
+    <!-- Add more fields as needed -->
+    <div class="button-group">
+      <button class="btn btn-add-secondary" @click="ViewProfileModel = false">Close</button>
+    </div>
+  </div>
+</div>
+
+
     </div>
   </div>
 </template>
@@ -96,6 +133,7 @@ export default {
   },
   setup() {
     const EditProfileModel = ref(false);
+    const ViewProfileModel = ref(false);
     const formData = ref({
       name: '',
       email: '',
@@ -128,6 +166,11 @@ export default {
       EditProfileModel.value = true;
       fetchUserDetails(); // Prefill form with user details
     };
+
+   const  openProfileModal = () => {
+      ViewProfileModel.value = true;
+      fetchUserDetails();
+    }
 
     const onFileChange = (event) => {
       const file = event.target.files[0];
@@ -193,12 +236,14 @@ export default {
 
     return {
       EditProfileModel,
+      ViewProfileModel,
       formData,
       previewImage,
       onFileChange,
       editProfile,
       resetForm,
       openEditProfileModal,
+      openProfileModal,
       error,
     };
   },
