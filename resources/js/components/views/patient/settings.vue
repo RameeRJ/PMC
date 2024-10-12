@@ -86,7 +86,7 @@
     <button class="close-icon" @click="ViewProfileModel = false">
       <i class="fas fa-times"></i>
     </button>
-    <h3 class="center"> View Profile</h3>
+    <h3 class="center">Profile</h3>
     <div class="profile-pic-container">
       <img
         :src="previewImage || '/storage/assets/images/default.jpg'"
@@ -94,19 +94,24 @@
         class="profile-preview"
       />
     </div>
-    <div class="form-group text-center">
-      <p class="data">{{ formData.name }}</p>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <p class="form-control-static">{{ formData.name }}</p>
     </div>
-    <div class="form-group text-center">
-      <p class="data">{{ formData.email }}</p>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <p class="form-control-static">{{ formData.email }}</p>
     </div>
-    <div class="form-group text-center">
-      <p class="data">{{ formData.phone }}</p>
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+      <p class="form-control-static">{{ formData.phone }}</p>
     </div>
     <!-- Add more fields as needed -->
+    <div class="button-group">
+      <button class="btn btn-add-secondary" @click="ViewProfileModel = false">Close</button>
+    </div>
   </div>
 </div>
-
 
 
     </div>
@@ -133,28 +138,28 @@ export default {
       name: '',
       email: '',
       phone: '',
-      profile_pic: null,
+      profile_picture: null,
     });
     const previewImage = ref(''); // Preview image variable
     const error = ref(null);
 
     // Function to fetch user details
     const fetchUserDetails = async () => {
-      try {
+    try {
         const response = await axios.post('/patient/user-details');
         formData.value.name = response.data.name;
         formData.value.email = response.data.email;
         formData.value.phone = response.data.phone;
 
         // Set profile picture if exists
-        formData.value.profile_pic = response.data.profile_pic;
-        previewImage.value = response.data.profile_pic 
-          ? `/storage/${response.data.profile_pic}` 
+        formData.value.profile_picture = response.data.profile_picture; // Change to profile_picture
+        previewImage.value = response.data.profile_picture 
+          ? `/storage/${response.data.profile_picture}` 
           : '/storage/assets/images/default.jpg';
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching user details:', error);
-      }
-    };
+    }
+};
 
     // Function to open the edit profile modal and prefill data
     const openEditProfileModal = () => {
@@ -182,42 +187,49 @@ export default {
     };
 
     const editProfile = async () => {
-      try {
-        const formDataObj = new FormData();
-        formDataObj.append('name', formData.value.name);
-        formDataObj.append('email', formData.value.email);
-        formDataObj.append('phone', formData.value.phone);
+  try {
+    const formDataObj = new FormData();
+    formDataObj.append('name', formData.value.name);
+    formDataObj.append('email', formData.value.email);
+    formDataObj.append('phone', formData.value.phone);
 
-        if (formData.value.profile_pic) {
-          formDataObj.append('profile_pic', formData.value.profile_pic);
-        }
+    // Change the key to 'profile_picture'
+    if (formData.value.profile_pic) {
+      formDataObj.append('profile_picture', formData.value.profile_pic);
+    }
 
-        const response = await axios.post('/patient/update-profile', formDataObj, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+    const response = await axios.post('/patient/update-profile', formDataObj, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-        console.log(response.data.message); // Display success message
-        EditProfileModel.value = false; // Close the modal after submission
-        Swal.fire({
-          icon: 'success',
-          title: 'Profile Edited successfully',
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Editing  Profile Failed',
+    console.log(response.data.message); // Display success message
+    EditProfileModel.value = false; // Close the modal after submission
+    Swal.fire({
+      icon: 'success',
+      title: 'Profile Edited successfully',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+    });
 
-          text: error.response?.data?.message || 'An error occurred. Please try again.',
-        });
-      }
-    };
+    // Update the preview image
+    previewImage.value = response.data.profile_pic 
+      ? `/storage/${response.data.profile_pic}` 
+      : '/storage/assets/images/default.jpg';
+      
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Editing Profile Failed',
+      text: error.response?.data?.message || 'An error occurred. Please try again.',
+    });
+  }
+};
+
 
     const resetForm = () => {
       formData.value = {
@@ -285,9 +297,5 @@ export default {
     margin: auto;
     padding: 14px;
     margin-top: 24px;
-  }
-  .data{
-    font-size: 20px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
 </style>

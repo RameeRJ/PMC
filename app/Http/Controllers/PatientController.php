@@ -93,20 +93,20 @@ public function getUserDetails()
         'name' => $user->name,
         'email' => $user->email,
         'phone' => $user->phone,
-        'profile_pic' => $user->profile_picture // Add profile picture to response
+        'profile_picture' => $user->profile_picture // Add profile picture to response
     ]);
 }
 
-    public function updateProfile(Request $request)
+public function updateProfile(Request $request)
 {
     $user = Auth::user();
-    
+
     // Validate the form data
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
         'phone' => 'required|string|regex:/^\d{10}$/',
-        'profile_picture' => 'nullable|image|max:2048', // Ensure the profile picture is an image
+        'profile_picture' => 'nullable|image|max:20480', // Ensure the profile picture is an image
     ]);
 
     // Update the user details
@@ -115,9 +115,9 @@ public function getUserDetails()
     $user->phone = $request->phone;
 
     // Handle profile picture upload
-    if ($request->hasFile('profilePicture')) {
-        // Store the file in the public disk (storage/app/public)
-        $filePath = $request->file('profilePicture')->store('profile_pictures', 'public');
+    if ($request->hasFile('profile_picture')) {
+        // Store the file in the public disk (storage/app/public/profile_pictures)
+        $filePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         $user->profile_picture = $filePath;
     }
 
@@ -139,7 +139,7 @@ public function getUserDetails()
             
             // Return the user data as a JSON response
             return response()->json([
-                'profile_pic' => $profilePicUrl,
+                'profile_picture' => $profilePicUrl,
                 'username' => $user->name,
                 'email' => $user->email,
             ], 200);
