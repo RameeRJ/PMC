@@ -33,6 +33,7 @@ const routes = [
       import(
         /* webpackChunkName: "signup" */ './components/views/admin/admin_dashboard.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/doctor',
@@ -41,6 +42,7 @@ const routes = [
       import(
         /* webpackChunkName: "signup" */ './components/views/doctor/doctor_dashboard.vue'
       ),
+      meta: { requiresAuth: true, userType: 'doctor'},
   },
   {
     path: '/patient',
@@ -49,6 +51,8 @@ const routes = [
       import(
         /* webpackChunkName: "signup" */ './components/views/patient/patient_dashboard.vue'
       ),
+      meta: { requiresAuth: true, userType: 'patient'},
+      
   },
 
   {
@@ -82,6 +86,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/admin/view-doctor.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/view-schedule',
@@ -90,6 +95,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/admin/view-schedule.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/view-appointment',
@@ -98,6 +104,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/admin/view-appointment.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/view-patients',
@@ -106,6 +113,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/admin/view-patients.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/view-department',
@@ -114,6 +122,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/admin/view-department.vue'
       ),
+      meta: { requiresAuth: true, userType: 'admin'},
   },
   {
     path: '/my-schedules',
@@ -122,6 +131,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/doctor/my-schedules.vue'
       ),
+      meta: { requiresAuth: true, userType: 'doctor'},
   },
   {
     path: '/my-appointments',
@@ -130,6 +140,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/doctor/my-appointments.vue'
       ),
+      meta: { requiresAuth: true, userType: 'doctor'},
   },
   {
     path: '/my-patients',
@@ -138,6 +149,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/doctor/my-patients.vue'
       ),
+      meta: { requiresAuth: true, userType: 'doctor'},
   },
   {
     path: '/all-doctors',
@@ -146,6 +158,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/patient/all-doctors.vue'
       ),
+      meta: { requiresAuth: true, userType: 'patient'},
   },
   {
     path: '/ongoing-schedules',
@@ -154,6 +167,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/patient/ongoing-schedules.vue'
       ),
+      meta: { requiresAuth: true, userType: 'patient'},
   },
   {
     path: '/my-booking',
@@ -162,6 +176,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/patient/my-booking.vue'
       ),
+      meta: { requiresAuth: true, userType: 'patient'},
   },
   {
     path: '/settings',
@@ -170,6 +185,7 @@ const routes = [
       import(
         /* webpackChunkName: "home" */ './components/views/patient/settings.vue'
       ),
+      meta: { requiresAuth: true, userType: 'patient'},
   },
 ];
 
@@ -177,6 +193,23 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated'); 
+  const userType = localStorage.getItem('userType'); 
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({ name: 'index' }); 
+    } else if (to.meta.userType && to.meta.userType !== userType) {
+      next({ name: 'index' }); 
+    } else {
+      next(); 
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
