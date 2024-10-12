@@ -14,39 +14,43 @@
           <p>Thanks for joinnig with us. We are always trying to get you a complete service
             You can view your dailly schedule, Reach Patients Appointment at home!</p>
         </div>
+
+        <div class="status-section mb-4">
+          <h3 class="center">Status Overview</h3>
         <div class="row">
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            
+              <div class="status-card">
                 <router-link to="/my-schedules" class="no-underline">
-                  <h5 class="card-title">Number of Schedules</h5>
-                  <p class="card-text">{{ numberOfSchedules }}</p>
+                  <h5 class="card-label">Number of Schedules</h5>
+                  <p class="card-count">{{ numberOfSchedules }}</p>
                 </router-link>
               </div>
             </div>
-          </div>
+          
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            
+              <div class="status-card">
                 <router-link to="/my-appointments" class="no-underline">
-                  <h5 class="card-title">Number of Appointments</h5>
-                  <p class="card-text">{{ numberOfAppointments  }}</p>
+                  <h5 class="card-label">Number of Appointments</h5>
+                  <p class="card-count">{{ numberOfAppointments  }}</p>
                 </router-link>
               </div>
             </div>
-          </div>
+         
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            
+              <div class="status-card">
                 <router-link to="/my-patients" class="no-underline">
-                  <h5 class="card-title">Number of Patients</h5>
-                  <p class="card-text">{{ numberOfPatients }}</p>
+                  <h5 class="card-label">Number of Patients</h5>
+                  <p class="card-count">{{ numberOfPatients }}</p>
                 </router-link>
               </div>
             </div>
-          </div>
+      
         </div>
         <!-- Add more Doctor content here -->
+      </div>
       </div>
     </div>
   </div>
@@ -135,7 +139,7 @@ const fetchPatient = async () => {
     );
 
     // Assign the length of filtered appointments to numberOfAppointments
-    numberOfPatiens.value = filteredAppointmentsByDoctor.value.length;
+    numberOfPatients.value = filteredAppointmentsByDoctor.value.length;
   } catch (error) {
     console.error("Error fetching appointments:", error);
   }
@@ -163,7 +167,7 @@ const fetchPatient = async () => {
 </script>
 
 <style scoped>
-/* Add any additional styles for DoctorHome if necessary */
+@import "/public/assets/css/dashboard.css";
 .card {
   margin-bottom: 20px;
 }

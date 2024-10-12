@@ -8,6 +8,7 @@ use App\Models\Appointment;
 use App\Http\Requests\AppointmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
@@ -82,5 +83,70 @@ public function removeAppointment($id)
         return response()->json(['message' => 'appointment not found or could not be deleted.'], 404);
     }
 }
+
+public function getUserDetails()
+{
+    $user = Auth::user();
+
+    // Return user details including profile picture
+    return response()->json([
+        'name' => $user->name,
+        'email' => $user->email,
+        'phone' => $user->phone,
+        'profile_pic' => $user->profile_picture // Add profile picture to response
+    ]);
+}
+
+    public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+    
+    // Validate the form data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
+        'phone' => 'required|string|regex:/^\d{10}$/',
+        'profile_picture' => 'nullable|image|max:2048', // Ensure the profile picture is an image
+    ]);
+
+    // Update the user details
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+
+    // Handle profile picture upload
+    if ($request->hasFile('profilePicture')) {
+        // Store the file in the public disk (storage/app/public)
+        $filePath = $request->file('profilePicture')->store('profile_pictures', 'public');
+        $user->profile_picture = $filePath;
+    }
+
+    $user->save(); // Save the user data
+
+    return response()->json(['message' => 'Profile updated successfully', 'profile_pic' => $user->profile_picture]);
+}
+
+    public function getProfilePicture()
+    {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+        
+        if ($user) {
+            // Construct the profile picture URL
+            $profilePicUrl = $user->profile_picture 
+                ? '/storage/profile_picture/' . $user->profile_picture 
+                : '/images/avatar/default_avatar.jpeg';
+            
+            // Return the user data as a JSON response
+            return response()->json([
+                'profile_pic' => $profilePicUrl,
+                'username' => $user->name,
+                'email' => $user->email,
+            ], 200);
+        }
+        
+        // Return an error if the user is not found
+        return response()->json(['error' => 'User not found'], 404);
+    }
 
 }

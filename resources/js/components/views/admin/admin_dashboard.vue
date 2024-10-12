@@ -12,39 +12,42 @@
         <div class="dashboard-header">
           <h2>Welcome <span class="user-name">{{ user.name }}</span></h2>
         </div>
-        <div class="row">
+        <div class="status-section mb-4">
+          <h3 class="center">Status Overview</h3>
+          <div class="row">
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            <div class="status-card">
+              
                 <router-link to="/view-doctor" class="no-underline">
-                <h5 class="card-title">Number of Doctors</h5>
-                <p class="card-text">{{ numberOfDoctors }}</p>
+                <h5 class="card-label">Number of Doctors</h5>
+                <p class="card-count">{{ numberOfDoctors }}</p>
               </router-link>
-              </div>
+            
             </div>
           </div>
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            <div class="status-card">
+             
                 <router-link to="/view-patients" class="no-underline">
-                <h5 class="card-title">Number of Patients</h5>
-                <p class="card-text">{{ numberOfPatients }}</p>
+                <h5 class="card-label">Number of Patients</h5>
+                <p class="card-count">{{ numberOfPatients }}</p>
                 </router-link>
-              </div>
+              
             </div>
           </div>
           <div class="col-md-4">
-            <div class="card text-center">
-              <div class="card-body">
+            <div class="status-card">
+             
                 <router-link to="/view-department" class="no-underline">
-                <h5 class="card-title">Number of Departments</h5>
-                <p class="card-text">{{ numberOfDepartments }}</p>
+                <h5 class="card-label">Number of Departments</h5>
+                <p class="card-count">{{ numberOfDepartments }}</p>
                 </router-link>
-              </div>
+             
             </div>
           </div>
         </div>
         <!-- Add more admin content here -->
+      </div>
       </div>
     </div>
   </div>
@@ -104,6 +107,7 @@ export default {
 
 <style scoped>
 /* Add any additional styles for AdminHome if necessary */
+@import "/public/assets/css/dashboard.css";
 .card {
   margin-bottom: 20px;
 }
