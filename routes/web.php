@@ -42,3 +42,4 @@ Route::delete('/appointments/{id}', [PatientController::class, 'removeappointmen
 Route::post('/patient/user-details', [PatientController::class, 'getUserDetails']);
 Route::post('/patient/update-profile', [PatientController::class, 'updateProfile']);
 Route::post('/user/profile-picture', [PatientController::class, 'getProfilePicture']);
+Route::get('/patient/user-details-sidebar', [PatientController::class, 'getUserDetailsSidebar']);

@@ -14,32 +14,22 @@
       </button>
 
       <div class="menu" :class="{ 'menu-closed': !isSidebarOpen }">
-          <table class="menu-container" border="0">
-              <tr>
-                  <td style="padding:10px" colspan="2">
-                      <table border="0" class="profile-container">
-                          <tr>
-                              <td width="30%" style="padding-left:20px">
-                                  <img :src="profileImage" alt="user" width="100%">
-                              </td>
-                              <td style="padding:0px;margin:0px;">
-                                  <p class="profile-title">{{ user ? user.name : 'Guest' }}</p>
-                                  <p class="profile-subtitle">{{ user ? user.email : 'Not logged in' }}</p>
-                              </td>
-                          </tr>
-                      </table>
-                  </td>
-              </tr>
-              <tr class="menu-row">
-                  <td class="menu-btn menu-icon-dashbord" :class="{ 'menu-active': isActive('/patient') }">
-                      <router-link to="/patient" class="non-style-link-menu">
-                          <div class="menu-item">
-                              <i class="fas fa-tachometer-alt"></i>
-                              <p class="menu-text">Dashboard</p>
-                          </div>
-                      </router-link>
-                  </td>
-              </tr>
+      <table class="menu-container" border="0">
+        <tr>
+          <td style="padding:10px" colspan="2">
+            <div class="profile-container">
+              <!-- Profile Image -->
+              <div class="profile-image">
+                <img :src="profileImage" alt="user" width="100px" height="100px">
+              </div>
+              <!-- Name and Email -->
+              <div class="profile-info">
+                <p class="profile-title">{{ user ? user.name : 'Guest' }}</p>
+                <p class="profile-subtitle">{{ user ? user.email : 'Not logged in' }}</p>
+              </div>
+            </div>
+          </td>
+        </tr>
               <tr class="menu-spacer"><td></td></tr>
               <tr class="menu-row">
                   <td class="menu-btn menu-icon-doctor" :class="{ 'menu-active': isActive('/all-doctors') }">
@@ -93,37 +83,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'PatientSidebar',
   data() {
-      return {
-          defaultProfileImage: '/storage/assets/images/default.jpg', // Default profile image path
-          isSidebarOpen: true,
-          user: null, // Initial state of the sidebar
-          profileImage: '', // Holds the profile image URL
-      };
+    return {
+      defaultProfileImage: '/storage/assets/images/default.jpg', // Default profile image path
+      isSidebarOpen: true,
+      user: null, // Initial state of the sidebar
+      profileImage: '', // Holds the profile image URL
+    };
   },
   mounted() {
-      // Retrieve the user from localStorage if logged in
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-          this.user = JSON.parse(storedUser);
-          // Get the profile picture from the user object or use the default
-          this.profileImage = this.user.profile_picture || this.defaultProfileImage;
-      } else {
-          this.profileImage = this.defaultProfileImage; // Set default image if no user is logged in
-      }
+    this.fetchUserProfile(); // Fetch the user profile when the component is mounted
   },
-
   methods: {
-      toggleSidebar() {
-          this.isSidebarOpen = !this.isSidebarOpen; // Toggle the sidebar state
-      },
-      isActive(route) {
-          return this.$route.path.startsWith(route);
-      },
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen; // Toggle the sidebar state
+    },
+    isActive(route) {
+      return this.$route.path.startsWith(route);
+    },
+    async fetchUserProfile() {
+      try {
+        const response = await axios.post('/patient/user-details'); // API call to fetch user profile
+        this.user = response.data; // Assign the user data to `user`
+        // Set the profile image or use the default
+        this.profileImage = this.user.profile_picture
+          ? `/storage/${this.user.profile_picture}`
+          : this.defaultProfileImage;
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        this.profileImage = this.defaultProfileImage; // Fallback to default profile image
+      }
+    },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -132,7 +128,7 @@ export default {
 img {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 21%;
   margin-left: -10px;
   margin-top: -26px;
   border: thick;

@@ -86,7 +86,7 @@
     <button class="close-icon" @click="ViewProfileModel = false">
       <i class="fas fa-times"></i>
     </button>
-    <h3 class="center">Profile</h3>
+    <h3 class="center">Profile View</h3>
     <div class="profile-pic-container">
       <img
         :src="previewImage || '/storage/assets/images/default.jpg'"

@@ -149,4 +149,17 @@ public function updateProfile(Request $request)
         return response()->json(['error' => 'User not found'], 404);
     }
 
+    public function getUserDetailsSidebar()
+{
+    $user = Auth::user();
+
+    // Return user details including profile picture
+    return response()->json([
+        'name' => $user->name,
+        'email' => $user->email,
+        'phone' => $user->phone,
+        'profile_picture' => $user->profile_picture // Add profile picture to response
+    ]);
+}
+
 }
