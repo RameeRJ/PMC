@@ -86,7 +86,7 @@
     <button class="close-icon" @click="ViewProfileModel = false">
       <i class="fas fa-times"></i>
     </button>
-    <h3 class="center">Profile</h3>
+    <h3 class="center"> View Profile</h3>
     <div class="profile-pic-container">
       <img
         :src="previewImage || '/storage/assets/images/default.jpg'"
@@ -94,24 +94,19 @@
         class="profile-preview"
       />
     </div>
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <p class="form-control-static">{{ formData.name }}</p>
+    <div class="form-group text-center">
+      <p class="data">{{ formData.name }}</p>
     </div>
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <p class="form-control-static">{{ formData.email }}</p>
+    <div class="form-group text-center">
+      <p class="data">{{ formData.email }}</p>
     </div>
-    <div class="form-group">
-      <label for="phone">Phone:</label>
-      <p class="form-control-static">{{ formData.phone }}</p>
+    <div class="form-group text-center">
+      <p class="data">{{ formData.phone }}</p>
     </div>
     <!-- Add more fields as needed -->
-    <div class="button-group">
-      <button class="btn btn-add-secondary" @click="ViewProfileModel = false">Close</button>
-    </div>
   </div>
 </div>
+
 
 
     </div>
@@ -290,5 +285,9 @@ export default {
     margin: auto;
     padding: 14px;
     margin-top: 24px;
+  }
+  .data{
+    font-size: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
 </style>
