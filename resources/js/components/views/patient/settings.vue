@@ -213,6 +213,8 @@ export default {
       position: 'top-end',
       showConfirmButton: false,
       timer: 2000,
+    }).then(() => {
+      window.location.reload(); // Refresh the page after the success toast
     });
 
     // Update the preview image
