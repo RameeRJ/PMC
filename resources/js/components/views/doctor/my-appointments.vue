@@ -79,9 +79,9 @@ export default {
         const response = await axios.post(`/appointments`); // Fetch all appointments
         appointments.value = response.data; // Assign the fetched appointments
         // Filter appointments based on the doctor's ID
-        filteredAppointmentsByDoctor.value = appointments.value.filter(appointment =>
-          appointment.schedule.doctor_id === Number(doctorId) // Ensure comparison with number
-        );
+        filteredAppointmentsByDoctor.value = appointments.value.filter(appointment => 
+      appointment.schedule && appointment.schedule.doctor_id === Number(doctorId) // Ensure schedule exists
+    );
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }

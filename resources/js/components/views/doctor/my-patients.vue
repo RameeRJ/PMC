@@ -112,9 +112,9 @@ export default {
           ...appointment,
           prescriptionSent: !!appointment.prescription, // Track if prescription is already sent
         }));
-        filteredAppointmentsByDoctor.value = appointments.value.filter(
-          (appointment) => appointment.schedule.doctor_id === Number(doctorId)
-        );
+        filteredAppointmentsByDoctor.value = appointments.value.filter(appointment => 
+      appointment.schedule && appointment.schedule.doctor_id === Number(doctorId) // Ensure schedule exists
+    );
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }

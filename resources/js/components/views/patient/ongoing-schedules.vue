@@ -33,7 +33,7 @@
                 <td>{{ schedule.schedule_title }}</td>
                 <td>{{ schedule.doctor.name }}</td>
                 <td>{{ formatDate(schedule.schedule_date)}}</td>
-                <td> {{ formatTime(appointment.schedule.start_time) }} - {{ formatTime(appointment.schedule.end_time) }}</td>
+                <td> {{ formatTime(schedule.start_time) }} - {{ formatTime(schedule.end_time) }}</td>
                 <td>
                   <button class="action" @click="openBookingModal(schedule)">
                     <span class="tooltip-text">Book Appointment</span>

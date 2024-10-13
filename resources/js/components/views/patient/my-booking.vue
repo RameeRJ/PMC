@@ -25,21 +25,23 @@
               <tr v-if="appointments.length === 0">
                 <td colspan="6" class="text-center">No appointments available</td>
               </tr>
-              <tr v-for="appointment in appointments" :key="appointment.id">
-                <td>{{ appointment.schedule.schedule_title }}</td>
-                <td>{{ appointment.schedule.doctor.name }}</td>
-                <td>{{ formatDate(appointment.schedule.schedule_date) }}</td>
-                <td>{{ formatTime(appointment.schedule.start_time) }}</td>
-                <td>{{ (appointment.token) }}</td>
-                <td>
-                  <button v-if ="!appointment.prescription" class="action" @click="removeAppointment(appointment.id)">
+              <tr v-for="appointment in filteredAppointments" :key="appointment.id">
+                <td v-if="appointment.schedule">{{ appointment.schedule.schedule_title }}</td>
+                <td v-if="appointment.schedule">{{ appointment.schedule.doctor.name }}</td>
+                <td v-if="appointment.schedule">{{ formatDate(appointment.schedule.schedule_date) }}</td>
+                <td v-if="appointment.schedule">{{ formatTime(appointment.schedule.start_time) }}</td>
+                <td v-if="appointment.schedule">{{ appointment.token }}</td>
+                <td v-if="appointment.schedule">
+                  <button v-if="!appointment.prescription" class="action" @click="removeAppointment(appointment.id)">
                     <span class="tooltip-text">Cancel Booking</span>
                     <i class="fa-solid fa-ban"></i>
                   </button>
-                  <button  v-else class="action" @click="confirmDownload(appointment.prescription, appointment.schedule.schedule_title, appointment.schedule.schedule_date)">
+                  <button v-else class="action" @click="confirmDownload(appointment.prescription, appointment.schedule.schedule_title, appointment.schedule.schedule_date)">
                     <span class="tooltip-text">Download Prescription</span>
                     <i class="fa-solid fa-download"></i>
                   </button>
+                </td>
+                <td v-else>
                 </td>
               </tr>
             </tbody>
@@ -53,7 +55,7 @@
 import axios from 'axios';
 import PatientSidebar from "../../layoutComponents/PatientSidebar.vue";
 import Navbar from "../../layoutComponents/NavBar.vue";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,computed } from 'vue';
 import Swal from 'sweetalert2';
 
 export default {
@@ -78,6 +80,9 @@ export default {
         error.value = 'Failed to load doctors. Please try again.';
       }
     };
+    const filteredAppointments = computed(() => {
+      return appointments.value.filter(appointment => appointment.schedule);
+    });
 
     const removeAppointment = async (id) => {
       Swal.fire({
@@ -181,6 +186,7 @@ const downloadPrescription = (prescriptionPath, scheduleName, appointmentDate) =
     formatTime, 
     removeAppointment,
     confirmDownload,
+    filteredAppointments
   };
 },
     };
