@@ -28,9 +28,9 @@
           <div class="col-md-4">
             <div class="status-card">
              
-                <router-link to="/view-patients" class="no-underline">
-                <h5 class="card-label">Number of Patients</h5>
-                <p class="card-count">{{ numberOfPatients }}</p>
+                <router-link to="/view-Schedule" class="no-underline">
+                <h5 class="card-label">Number of Schedules</h5>
+                <p class="card-count">{{ numberOfSchedules }}</p>
                 </router-link>
               
             </div>
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       numberOfDoctors: 0, // Array to hold the list of doctors
-      numberOfPatients: 0, // Number of patients (initialize as needed)
+      numberOfSchedules: 0, // Number of Schedules (initialize as needed)
       numberOfDepartments: 0, // Number of appointments (initialize as needed)
       user: {}
     };
@@ -79,6 +79,7 @@ export default {
     if (storedUser) {
       this.user = JSON.parse(storedUser);
       }
+    this.fetchSchedules(); 
   },
   methods: {
     fetchStats() {
@@ -100,6 +101,16 @@ export default {
       .catch(error => {
         console.error('Error fetching departments:', error);
       });
+    },
+
+    fetchSchedules() {
+      axios.post('/patient/schedules')
+      .then(response => {
+        this.numberOfSchedules = response.data.schedules.length;
+        })
+        .catch(error => {
+          console.error('Error fetching schedules:', error);
+          });
     }
   },
 };

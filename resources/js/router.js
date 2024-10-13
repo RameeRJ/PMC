@@ -156,7 +156,7 @@ const routes = [
     name: 'analytics',
     component: () =>
       import(
-        /* webpackChunkName: "home" */ './components/views/doctor/analytics.vue'
+        /* webpackChunkName: "home" */ './components/views/doctor/doctor-analytics.vue'
       ),
       meta: { requiresAuth: true, userType: 'doctor'},
   },

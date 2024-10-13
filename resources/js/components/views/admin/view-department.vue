@@ -17,14 +17,14 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>Department ID</th>
+                  <th>Sl. No</th>
                   <th>Department Name</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="department in departments" :key="department.id">
-                  <td>{{ department.id }}</td>
+                <tr v-for="department,index in departments" :key="department.id">
+                  <td>{{ index + 1 }}</td>
                   <td>{{ department.name }}</td>
                   <td>
                     <button class="action" @click="removeDepartment(department.id)">

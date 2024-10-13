@@ -21,21 +21,19 @@
                 <th>Schedule Title</th>
                 <th>Doctor Name</th>
                 <th>Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
+                <th>Time</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="filteredSchedules.length === 0">
-      <td colspan="6" class="text-center">No schedules available</td>
+      <td colspan="5" class="text-center">No schedules available</td>
     </tr>
               <tr v-for="schedule in filteredSchedules" :key="schedule.id">
                 <td>{{ schedule.schedule_title }}</td>
                 <td>{{ schedule.doctor.name }}</td>
                 <td>{{ formatDate(schedule.schedule_date)}}</td>
-                <td>{{ formatTime(schedule.start_time) }}</td>
-                <td>{{ formatTime(schedule.end_time)  }}</td>
+                <td> {{ formatTime(appointment.schedule.start_time) }} - {{ formatTime(appointment.schedule.end_time) }}</td>
                 <td>
                   <button class="action" @click="openBookingModal(schedule)">
                     <span class="tooltip-text">Book Appointment</span>
