@@ -76,6 +76,17 @@
               </router-link>
             </td>
           </tr>
+          <tr class="menu-spacer"><td></td></tr>
+          <tr class="menu-row">
+            <td class="menu-btn menu-icon-analytics" :class="{ 'menu-active': isActive('/analytics') }">
+              <router-link to="/analytics" class="non-style-link-menu">
+                <div class="menu-item">
+                  <i class="fas fa-calendar-alt"></i>
+                  <p class="menu-text">Analytics</p>
+                </div>
+              </router-link>
+            </td>
+          </tr>
         </table>
       </div>
     </div>

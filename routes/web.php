@@ -31,6 +31,7 @@ Route::post('/get-doctor-id', [DoctorController::class, 'getDoctorIdByEmail']);
 Route::delete('/schedules/{id}', [DoctorController::class, 'removeSchedule']);
 Route::post('/appointments', [DoctorController::class, 'getAppointment']);
 Route::post('/appointments/{id}/prescription', [DoctorController::class, 'uploadPrescription']);
+Route::post('/appointments-by-schedule/{doctorId}', [DoctorController::class, 'getAppointmentsBySchedule']);
 
 
 

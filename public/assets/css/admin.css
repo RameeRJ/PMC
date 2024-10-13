@@ -130,6 +130,9 @@
   
   .menu-icon-schedule i:before {
     content: "\f46d"; /* FontAwesome calendar icon */
+
+  } .menu-icon-analytics i:before {
+    content: "\e473"; /* FontAwesome calendar icon */
   }
   
   .menu-icon-appointment i:before {

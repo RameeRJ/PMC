@@ -115,6 +115,15 @@ public function uploadPrescription(Request $request, $id)
     return response()->json(['error' => 'No file uploaded'], 400);
 }
 
+public function getAppointmentsBySchedule($doctorId)
+{
+    $appointmentsBySchedule = Schedule::where('doctor_id', $doctorId)
+        ->withCount('appointments')
+        ->get();
+
+    return response()->json($appointmentsBySchedule);
+}
+
 
 
     
