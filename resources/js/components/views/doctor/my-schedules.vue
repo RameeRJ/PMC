@@ -114,7 +114,7 @@ export default {
       try {
         const response = await axios.post(`/schedules/${doctorId}`);
         console.log("Schedules fetched:", response.data);
-        schedules.value = response.data.schedules;
+        schedules.value = response.data.schedules.filter(schedule => !isPast(schedule.schedule_date));
       } catch (error) {
         console.error("Error fetching schedules:", error);
         error.value = 'Failed to load doctors. Please try again.';
@@ -184,6 +184,12 @@ export default {
   }
 }
       });
+    };
+
+    const isPast = (dateString) => {
+      const today = new Date();
+      const date = new Date(dateString);
+      return date < today.setHours(0, 0, 0, 0); // Return true if the schedule date is before today
     };
 
     // Reset the form fields

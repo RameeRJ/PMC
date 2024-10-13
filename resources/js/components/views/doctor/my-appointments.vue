@@ -80,7 +80,7 @@ export default {
         appointments.value = response.data; // Assign the fetched appointments
         // Filter appointments based on the doctor's ID
         filteredAppointmentsByDoctor.value = appointments.value.filter(appointment => 
-      appointment.schedule && appointment.schedule.doctor_id === Number(doctorId) // Ensure schedule exists
+        !isPast(appointment.schedule && appointment.schedule.doctor_id === Number(doctorId)) // Ensure schedule exists
     );
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -107,6 +107,14 @@ export default {
         year: 'numeric',
       });
     };
+
+    const isPast = (dateString) => {
+      const today = new Date();
+      const date = new Date(dateString);
+      return date < today.setHours(0, 0, 0, 0); // Return true if the schedule date is before today
+    };
+
+    
     const getPatient = (appointment) => {
   // Show confirmation dialog
   Swal.fire({

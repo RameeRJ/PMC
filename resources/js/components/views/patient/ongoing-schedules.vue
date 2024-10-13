@@ -109,7 +109,10 @@ export default {
     const fetchSchedules = async () => {
       try {
         const response = await axios.post("/patient/schedules");
-        schedules.value = response.data.schedules;
+        // Filter out past schedules
+        schedules.value = response.data.schedules.filter(
+          (schedule) => !isPast(schedule.schedule_date)
+        );
       } catch (error) {
         console.error("Error fetching schedules:", error);
       }
@@ -135,6 +138,13 @@ export default {
     year: 'numeric'    // Full year (e.g., "2024")
   });
 };
+
+const isPast = (dateString) => {
+      const today = new Date();
+      const date = new Date(dateString);
+      return date < today.setHours(0, 0, 0, 0); // Return true if the schedule date is before today
+    };
+    
 
 const openBookingModal = (schedule) => {
       selectedSchedule.value = schedule;
