@@ -32,6 +32,7 @@ Route::delete('/schedules/{id}', [DoctorController::class, 'removeSchedule']);
 Route::post('/appointments', [DoctorController::class, 'getAppointment']);
 Route::post('/appointments/{id}/prescription', [DoctorController::class, 'uploadPrescription']);
 Route::post('/appointments-by-schedule/{doctorId}', [DoctorController::class, 'getAppointmentsBySchedule']);
+Route::post('/doctor/user-details', [DoctorController::class, 'getDoctorDetails']);
 
 
 
@@ -43,4 +44,3 @@ Route::delete('/appointments/{id}', [PatientController::class, 'removeappointmen
 Route::post('/patient/user-details', [PatientController::class, 'getUserDetails']);
 Route::post('/patient/update-profile', [PatientController::class, 'updateProfile']);
 Route::post('/user/profile-picture', [PatientController::class, 'getProfilePicture']);
-Route::get('/patient/user-details-sidebar', [PatientController::class, 'getUserDetailsSidebar']);
