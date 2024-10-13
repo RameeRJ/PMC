@@ -26,24 +26,24 @@
                 <td colspan="6" class="text-center">No appointments available</td>
               </tr>
               <tr v-for="appointment in filteredAppointments" :key="appointment.id">
-                <td v-if="appointment.schedule">{{ appointment.schedule.schedule_title }}</td>
-                <td v-if="appointment.schedule">{{ appointment.schedule.doctor.name }}</td>
-                <td v-if="appointment.schedule">{{ formatDate(appointment.schedule.schedule_date) }}</td>
-                <td v-if="appointment.schedule">{{ formatTime(appointment.schedule.start_time) }}</td>
-                <td v-if="appointment.schedule">{{ appointment.token }}</td>
-                <td v-if="appointment.schedule">
-                  <button v-if="!appointment.prescription" class="action" @click="removeAppointment(appointment.id)">
-                    <span class="tooltip-text">Cancel Booking</span>
-                    <i class="fa-solid fa-ban"></i>
-                  </button>
-                  <button v-else class="action" @click="confirmDownload(appointment.prescription, appointment.schedule.schedule_title, appointment.schedule.schedule_date)">
-                    <span class="tooltip-text">Download Prescription</span>
-                    <i class="fa-solid fa-download"></i>
-                  </button>
-                </td>
-                <td v-else>
-                </td>
-              </tr>
+    <template v-if="appointment.schedule && appointment.schedule.doctor">
+      <td>{{ appointment.schedule.schedule_title }}</td>
+      <td>{{ appointment.schedule.doctor.name }}</td>
+      <td>{{ formatDate(appointment.schedule.schedule_date) }}</td>
+      <td>{{ formatTime(appointment.schedule.start_time) }}</td>
+      <td>{{ appointment.token }}</td>
+      <td>
+        <button v-if="!appointment.prescription" class="action" @click="removeAppointment(appointment.id)">
+          <span class="tooltip-text">Cancel Booking</span>
+          <i class="fa-solid fa-ban"></i>
+        </button>
+        <button v-else class="action" @click="confirmDownload(appointment.prescription, appointment.schedule.schedule_title, appointment.schedule.schedule_date)">
+          <span class="tooltip-text">Download Prescription</span>
+          <i class="fa-solid fa-download"></i>
+        </button>
+      </td>
+    </template>
+  </tr>
             </tbody>
           </table>
         </div>

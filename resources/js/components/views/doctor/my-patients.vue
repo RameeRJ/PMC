@@ -136,9 +136,22 @@ export default {
     };
 
     const submitPrescription = async () => {
-      if (!prescriptionFile.value) {
+  if (!prescriptionFile.value) {
     Swal.fire("Error", "File is required.", "error");
     return; // Exit the function if no file is uploaded
+  }
+
+  // Get the appointment date
+  const appointment = appointments.value.find(app => app.id === selectedAppointmentId.value);
+  if (appointment) {
+    const appointmentDate = new Date(appointment.schedule.date); // Assuming `schedule.date` contains the appointment date
+    const currentDate = new Date();
+
+    // Check if the appointment date is in the past
+    if (appointmentDate < currentDate) {
+      Swal.fire("Error", "Cannot send prescription for past appointments.", "error");
+      return; // Exit the function if the appointment date is in the past
+    }
   }
 
       const formData = new FormData();

@@ -15,10 +15,6 @@
           <h5 class="text">Edit your profile</h5>
           <p>Edit your Account Details & Upload Profile picture</p>
         </div>
-        <div class="settings-option delete-option">
-          <h5 class="text-danger">Delete Account</h5>
-          <p>Will Permanently Remove Your Account</p>
-        </div>
       </div>
       <div v-if="EditProfileModel" class="modal-backdrop">
         <div class="modal-content">

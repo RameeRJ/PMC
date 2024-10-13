@@ -29,18 +29,20 @@
               <tr v-if="filteredSchedules.length === 0">
       <td colspan="5" class="text-center">No schedules available</td>
     </tr>
-              <tr v-for="schedule in filteredSchedules" :key="schedule.id">
-                <td>{{ schedule.schedule_title }}</td>
-                <td>{{ schedule.doctor.name }}</td>
-                <td>{{ formatDate(schedule.schedule_date)}}</td>
-                <td> {{ formatTime(schedule.start_time) }} - {{ formatTime(schedule.end_time) }}</td>
-                <td>
-                  <button class="action" @click="openBookingModal(schedule)">
-                    <span class="tooltip-text">Book Appointment</span>
-                    <i class="fas fa-book-medical"></i>
-                  </button>      
-                </td>
-              </tr>
+    <tr v-for="schedule in filteredSchedules" :key="schedule.id">
+      <template v-if="schedule.doctor">
+        <td>{{ schedule.schedule_title }}</td>
+        <td>{{ schedule.doctor.name }}</td>
+        <td>{{ formatDate(schedule.schedule_date) }}</td>
+        <td>{{ formatTime(schedule.start_time) }} - {{ formatTime(schedule.end_time) }}</td>
+        <td>
+          <button class="action" @click="openBookingModal(schedule)">
+            <span class="tooltip-text">Book Appointment</span>
+            <i class="fas fa-book-medical"></i>
+          </button>
+        </td>
+      </template>
+    </tr>
             </tbody>
           </table>
         </div>
